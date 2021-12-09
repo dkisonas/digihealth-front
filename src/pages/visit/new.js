@@ -1,5 +1,5 @@
-import Header from "../../components/Header";
-import VisitRegistrationForm from "../../components/VisitRegistrationForm";
+import Header from '../../components/Header';
+import VisitRegistrationForm from '../../components/VisitRegistrationForm';
 
 function Visit() {
   return (

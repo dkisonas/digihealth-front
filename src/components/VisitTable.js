@@ -1,46 +1,12 @@
-import Link from "next/link";
-
-const doctorVisits = [
-  {
-    id: 1,
-    date: "2021-11-11",
-    title: "Akių patikra",
-    name: "Jonas Jonaitis",
-    status: "Patvirtintas",
-  },
-  {
-    id: 2,
-    date: "2021-11-12",
-    title: "Akių patikra",
-    name: "Jonas Jonaitis",
-    status: "Atšauktas",
-  },
-  // More people...
-];
-
-const patientVisits = [
-  {
-    id: 3,
-    date: "2021-11-11",
-    title: "Akių patikra",
-    name: "Daktaras Hausas",
-    status: "Patvirtintas",
-  },
-  {
-    id: 4,
-    date: "2021-11-12",
-    title: "Akių patikra",
-    name: "Daktaras Hausas",
-    status: "Atšauktas",
-  },
-  // More people...
-];
+import Link from 'next/link';
 
 const viewMode = process.env.NEXT_PUBLIC_VIEW_MODE;
 
-export default function VisitTable() {
-  const doctorMode = viewMode === "doctor" ? true : false;
-  const visits = doctorMode ? doctorVisits : patientVisits;
+export default function VisitTable(props) {
+  const doctorMode = viewMode === 'doctor' ? true : false;
+  const { visits } = props.visits;
+  console.log(visits);
+
   return (
     <div className="flex flex-col">
       <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -65,7 +31,7 @@ export default function VisitTable() {
                     scope="col"
                     className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                   >
-                    {viewMode === "doctor" ? "Pacientas" : "Gydytojas"}
+                    {viewMode === 'doctor' ? 'Pacientas' : 'Gydytojas'}
                   </th>
 
                   <th
@@ -84,24 +50,22 @@ export default function VisitTable() {
                 {visits.map((visit, visitIdx) => (
                   <tr
                     key={visit.id}
-                    className={visitIdx % 2 === 0 ? "bg-white" : "bg-gray-50"}
+                    className={visitIdx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}
                   >
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                       {visit.date}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {visit.title}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                       {visit.name}
                     </td>
-                    {!doctorMode && visit.status === "Įvykęs" ? null : (
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {visit.status}
-                      </td>
-                    )}
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {doctorMode ? visit.patientName : visit.doctorName}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {visit.status}
+                    </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <Link href="/visit">
+                      <Link href={`/visit/${visit.id}`}>
                         <div className="text-indigo-600 hover:text-indigo-900 link">
                           Atidaryti
                         </div>
