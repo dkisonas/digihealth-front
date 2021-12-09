@@ -9,13 +9,8 @@ async function fetchJson(url) {
 }
 
 async function update(url, body) {
-  console.log('wtf');
-  console.log(body);
   const res = await axios.put(`${apiUrl}${url}`, body);
-  //   console.log(res);
   const { result } = await res.data;
-  console.log('result from server');
-  console.log(result);
   return result;
 }
 

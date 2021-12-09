@@ -58,6 +58,10 @@ export default function VisitRegistrationForm() {
     setDescription(e.target.value);
   };
 
+  const handleFreeTime = (e) => {
+    setFreeTime(e.target.value);
+  };
+
   const handleDoctor = (e) => {
     const { id, fullName } = JSON.parse(e.target.value);
     console.log(id);
@@ -179,8 +183,8 @@ export default function VisitRegistrationForm() {
                 <select
                   id="freeTimes"
                   name="freeTimes"
-                  onSelect={(time) => setFreeTime(time)}
-                  onChange={(time) => setFreeTime(time)}
+                  onSelect={handleFreeTime}
+                  onChange={handleFreeTime}
                   className="max-w-lg block focus:ring-indigo-500 focus:border-indigo-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                 >
                   {freeTimes.map((time, i) => (
