@@ -1,15 +1,10 @@
-import Link from "next/link";
+import Link from 'next/link';
 
-const patients = [
-  {
-    id: 5,
-    dob: "2021-11-11",
-    name: "Jonas Jonaitis",
-  },
-  // More people...
-];
+export default function PatientTable(props) {
+  const { patients } = props.patients;
 
-export default function Table() {
+  console.log(patients);
+
   return (
     <div className="flex flex-col">
       <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -40,13 +35,13 @@ export default function Table() {
                 {patients.map((patient, patientIdx) => (
                   <tr
                     key={patient.id}
-                    className={patientIdx % 2 === 0 ? "bg-white" : "bg-gray-50"}
+                    className={patientIdx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}
                   >
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                      {patient.dob}
+                      {patient.birthday.substring(0, 10)}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {patient.name}
+                      {`${patient.firstName} ${patient.lastName}`}
                     </td>
 
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
