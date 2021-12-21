@@ -13,6 +13,10 @@ export default function VisitForm(props) {
   const router = useRouter();
   const [visitStatus, setVisitStatus] = useState(props.visit.status);
   const [visit, setVisit] = useState(props.visit);
+  const [record, setRecord] = useState(props.record[0]);
+
+  console.log(props);
+
   const [medicine] = useState(props.medicine);
 
   async function cancelVisit() {
@@ -58,11 +62,19 @@ export default function VisitForm(props) {
             </dd>
           </div>
           <div className="py-4 sm:py-5 sm:gnrid sm:grid-cols-3 sm:gap-4">
-            <dt className="text-sm font-medium text-gray-500">Aprašymas</dt>
+            <dt className="text-sm font-medium text-gray-500"> Vizito aprašymas</dt>
             <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
               {visit.description}
             </dd>
           </div>
+          {visitStatus === 'Occurred' ? (
+            <div className="py-4 sm:py-5 sm:gnrid sm:grid-cols-3 sm:gap-4">
+              <dt className="text-sm font-medium text-gray-500"> Įrašo aprašymas</dt>
+              <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                {record.description}
+              </dd>
+            </div>
+          ) : null}
         </dl>
         <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
           <label
