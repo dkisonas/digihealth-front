@@ -9,7 +9,7 @@ function Visit(props) {
       <Header />
 
       <main className="max-w-screen-md mx-auto py-10">
-        <VisitForm visit={props.visit} medicine={props.medicine} />
+        <VisitForm visit={props.visit} medicine={props.medicine} record={props.record} />
       </main>
     </div>
   );
@@ -25,6 +25,7 @@ export async function getServerSideProps({ query }) {
     return x;
   });
   const medicine = await fetchJson('/Recipe/get/selectableMedicaments');
+  const record = await fetchJson(`/HealthRecord/get/byVisit?visitId=${visitId}`)
 
-  return { props: { visit, medicine } };
+  return { props: { visit, medicine, record } };
 }
