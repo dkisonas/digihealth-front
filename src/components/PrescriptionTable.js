@@ -1,17 +1,13 @@
-import { useRouter } from 'next/router';
-import { update } from '../utils/HttpUtils';
-import { useState } from 'react';
+import moment from 'moment';
+import Link from 'next/link';
 
-const prescriptions = [
-  {
-    id: 9,
-    title: "Nimesil",
-    expiryDate: "2021-11-11",
-    doctorName: "Daktaras Hausas",
-  },
-];
+const dateFormat = 'yyyy-MM-DD';
 
-export default function PrescriptionTable() {
+
+export default function PrescriptionTable(props) {
+
+  const prescription  = props.prescription;
+
   return (
     <div className="flex flex-col">
       <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -24,42 +20,29 @@ export default function PrescriptionTable() {
                     scope="col"
                     className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                   >
-                    Vaisto pavadinimas
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                  >
                     Recepto galiojimo data
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                  >
-                    Gydytojas
                   </th>
                 </tr>
               </thead>
-              <tbody>
-                {prescriptions.map((prescription, prescriptionIdx) => (
+               <tbody>
+                {prescription.map((recipe, recipeId) => (
                   <tr
-                    key={prescription.id}
-                    className={
-                      prescriptionIdx % 2 === 0 ? "bg-white" : "bg-gray-50"
-                    }
+                    key={recipe.id}
+                    className={recipeId % 2 === 0 ? 'bg-white' : 'bg-gray-50'}
                   >
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                      {prescription.title}
-                    </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {prescription.expiryDate}
+                      {moment(recipe.expiredDate).format(dateFormat)}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {prescription.doctorName}
+                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                      <Link href={`/prescription/${recipe.id}`}>
+                        <div className="text-indigo-600 hover:text-indigo-900 link">
+                          Atidaryti
+                        </div>
+                      </Link>
                     </td>
                   </tr>
                 ))}
-              </tbody>
+              </tbody> 
             </table>
           </div>
         </div>
