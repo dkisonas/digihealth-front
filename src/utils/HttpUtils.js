@@ -4,8 +4,8 @@ const apiUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 async function fetchJson(url) {
   let isOk = true;
-  const res = await fetch(`${apiUrl}${url}`).catch(err => {
-    alert(err.response.data);
+  const res = await fetch(`${apiUrl}${url}`).catch((err) => {
+    // alert(err.response.data);
     isOk = false;
   });
 
@@ -17,11 +17,10 @@ async function fetchJson(url) {
 }
 
 async function update(url, body) {
-
   let isOk = true;
 
-  const res = await axios.put(`${apiUrl}${url}`, body).catch(err => {
-    alert(err.response.data);
+  const res = await axios.put(`${apiUrl}${url}`, body).catch((err) => {
+    // alert(err.response.data);
     isOk = false;
   });
 
