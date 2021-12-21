@@ -5,7 +5,6 @@ const viewMode = process.env.NEXT_PUBLIC_VIEW_MODE;
 export default function VisitTable(props) {
   const doctorMode = viewMode === 'doctor' ? true : false;
   const { visits } = props.visits;
-  console.log(visits);
 
   return (
     <div className="flex flex-col">
