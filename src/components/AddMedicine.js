@@ -8,6 +8,14 @@ export default function AddMedicine(props) {
   const [selectedMedicine, setSelectedMedicine] = useState();
   const [usingTimes, setUsingTimes] = useState();
 
+  const handleUsingTimes = (e) => {
+    // setFirstName(e.target.value);
+  };
+
+  const handleMedicine = (e) => {
+    // setFirstName(e.target.value);
+  };
+
   return (
     <div className="text-center border mt-6 py-6">
       <div className="mb-6">

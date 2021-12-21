@@ -3,7 +3,7 @@ import Link from "next/link";
 const navigation = [
   { name: "Mano vizitai", href: "/", doctor: true },
   { name: "Mano vizitai", href: "/", doctor: false },
-  { name: "Receptai", href: "/prescriptions", doctor: false },
+  { name: "Receptai", href: "/prescription", doctor: false },
   { name: "Ligos istorija", href: "/visit/history", doctor: false },
   { name: "Mano duomenys", href: "/user", doctor: false },
   { name: "Mano pacientai", href: "/patients", doctor: true },
