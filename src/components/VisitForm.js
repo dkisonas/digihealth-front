@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import AddLabTests from './AddLabTests';
 import AddMedicine from './AddMedicine';
-import MedicineTable from './MedicineTable';
 import moment from 'moment';
 import { useRouter } from 'next/router';
 import { update } from '../utils/HttpUtils';
@@ -34,12 +33,8 @@ export default function VisitForm(props) {
 
   const handleMedicines = (medicine) => {
     let tempMedicines = selectedMedicines;
-    if (tempMedicines.find((x) => x.id == medicine.id)) {
-      return;
-    }
     tempMedicines.push(medicine);
     setSelectedMedicines(tempMedicines);
-    console.log(selectedMedicines);
   };
 
   return (
@@ -49,8 +44,11 @@ export default function VisitForm(props) {
           <h3 className="text-lg leading-6 font-medium text-gray-900">
             Įrašo Informacija
           </h3>
-        ) : (<h3 className="text-lg leading-6 font-medium text-gray-900">
-          Vizito Informacija </h3>)}
+        ) : (
+          <h3 className="text-lg leading-6 font-medium text-gray-900">
+            Vizito Informacija{' '}
+          </h3>
+        )}
       </div>
       <div className="mt-5 border-t border-gray-200">
         <dl className="sm:divide-y sm:divide-gray-200">
@@ -75,14 +73,20 @@ export default function VisitForm(props) {
             </dd>
           </div>
           <div className="py-4 sm:py-5 sm:gnrid sm:grid-cols-3 sm:gap-4">
-            <dt className="text-sm font-medium text-gray-500"> Vizito aprašymas</dt>
+            <dt className="text-sm font-medium text-gray-500">
+              {' '}
+              Vizito aprašymas
+            </dt>
             <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
               {visit.description}
             </dd>
           </div>
           {visitStatus === 'Occurred' ? (
             <div className="py-4 sm:py-5 sm:gnrid sm:grid-cols-3 sm:gap-4">
-              <dt className="text-sm font-medium text-gray-500"> Įrašo aprašymas</dt>
+              <dt className="text-sm font-medium text-gray-500">
+                {' '}
+                Įrašo aprašymas
+              </dt>
               <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                 {record?.description}
               </dd>
@@ -130,60 +134,6 @@ export default function VisitForm(props) {
               </div>
             </div>
             <AddMedicine medicine={allMedicine} onChange={handleMedicines} />
-            <div className="flex flex-col">
-              <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-                <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-                  <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-                    <table className="min-w-full divide-y divide-gray-200">
-                      <thead className="bg-gray-50">
-                        <tr>
-                          <th
-                            scope="col"
-                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                          >
-                            Pavadinimas
-                          </th>
-                          <th
-                            scope="col"
-                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                          >
-                            Vartojimo laikai
-                          </th>
-
-                          <th scope="col" className="relative px-6 py-3">
-                            <span className="sr-only">Ištrinti</span>
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {selectedMedicines.map(
-                          ({ selectedMedicine, usingTimes }, medIdx) => (
-                            <tr
-                              key={selectedMedicine.id}
-                              className={
-                                medIdx % 2 === 0 ? 'bg-white' : 'bg-gray-50'
-                              }
-                            >
-                              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                {selectedMedicine.name}
-                              </td>
-                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                {usingTimes}
-                              </td>
-                              <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                <div className="text-indigo-600 hover:text-indigo-900 link">
-                                  Atidaryti
-                                </div>
-                              </td>
-                            </tr>
-                          )
-                        )}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            </div>
             <AddLabTests />
           </div>
         ) : null}
