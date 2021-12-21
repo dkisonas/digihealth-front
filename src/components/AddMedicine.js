@@ -27,14 +27,6 @@ export default function AddMedicine(props) {
     setSelectedMedicines(selectedMedicines.concat(medicine));
   };
 
-  const handleUsingTimes = (e) => {
-    // setFirstName(e.target.value);
-  };
-
-  const handleMedicine = (e) => {
-    // setFirstName(e.target.value);
-  };
-
   return (
     <div className="text-center border mt-6 py-6">
       <div className="mb-6">
