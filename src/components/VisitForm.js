@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import AddLabTests from './AddLabTests';
 import AddMedicine from './AddMedicine';
-import MedicineTable from './MedicineTable';
 import moment from 'moment';
 import { useRouter } from 'next/router';
 import { update } from '../utils/HttpUtils';
@@ -34,7 +33,6 @@ export default function VisitForm(props) {
     let tempMedicines = selectedMedicines;
     tempMedicines.push(medicine);
     setSelectedMedicines(tempMedicines);
-    console.log(selectedMedicines);
   };
 
   return (
@@ -114,7 +112,6 @@ export default function VisitForm(props) {
               </div>
             </div>
             <AddMedicine medicine={allMedicine} onChange={handleMedicines} />
-            <MedicineTable medicine={selectedMedicines} />
             <AddLabTests />
           </div>
         ) : null}

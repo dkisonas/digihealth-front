@@ -1,9 +1,8 @@
-/* This example requires Tailwind CSS v2.0+ */
 import { PlusIcon } from '@heroicons/react/solid';
 import { useState } from 'react';
-import MedicineTable from './MedicineTable';
 
 export default function AddMedicine(props) {
+  const [selectedMedicines, setSelectedMedicines] = useState([]);
   const [allMedicineList] = useState(props.medicine);
   const [selectedMedicine, setSelectedMedicine] = useState(allMedicineList[0]);
   const [usingTimes, setUsingTimes] = useState('');
@@ -13,15 +12,19 @@ export default function AddMedicine(props) {
   };
 
   const handleMedicine = (e) => {
-    setSelectedMedicine(e.target.value);
+    const med = allMedicineList.find((x) => x.id === e.target.value);
+    setSelectedMedicine(med.id);
   };
 
   const addMedicine = () => {
     const medicine = {
-      selectedMedicine,
-      usingTimes,
+      med: allMedicineList.find((x) => x.id === selectedMedicine),
+      times: usingTimes,
     };
-    props.onChange(medicine);
+    if (selectedMedicines.find((x) => x.med.id === selectedMedicine)) {
+      return;
+    }
+    setSelectedMedicines(selectedMedicines.concat(medicine));
   };
 
   return (
@@ -41,7 +44,7 @@ export default function AddMedicine(props) {
             onChange={handleMedicine}
           >
             {allMedicineList.map(({ id, name }, i) => (
-              <option key={i} value={JSON.stringify({ id, name })}>
+              <option key={i} value={id}>
                 {name}
               </option>
             ))}
@@ -72,6 +75,57 @@ export default function AddMedicine(props) {
           <PlusIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
           Pridėti vaistų
         </button>
+
+        <div className="flex flex-col mt-6">
+          <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+            <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+              <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      >
+                        Pavadinimas
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      >
+                        Vartojimo laikai
+                      </th>
+
+                      <th scope="col" className="relative px-6 py-3">
+                        <span className="sr-only">Ištrinti</span>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {selectedMedicines.map(({ med, times }, medIdx) => (
+                      <tr
+                        key={medIdx}
+                        className={medIdx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}
+                      >
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                          {med.name}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {times}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                          <div className="text-indigo-600 hover:text-indigo-900 link">
+                            Ištrinti
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
