@@ -3,8 +3,6 @@ import Link from 'next/link';
 export default function PatientTable(props) {
   const { patients } = props.patients;
 
-  console.log(patients);
-
   return (
     <div className="flex flex-col">
       <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
