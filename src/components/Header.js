@@ -7,12 +7,14 @@ const navigation = [
   { name: "Ligos istorija", href: "/visit/history", doctor: false },
   { name: "Mano duomenys", href: "/user", doctor: false },
   { name: "Mano pacientai", href: "/patients", doctor: true },
+  { name: "Tyrimai", href: "/labtests", worker: true }
 ];
 
 const viewMode = process.env.NEXT_PUBLIC_VIEW_MODE;
 
 export default function Header() {
   const doctorMode = viewMode === "doctor" ? true : false;
+  const workerMode = viewMode === "worker" ? true : false;
   return (
     <header className="bg-indigo-600">
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" aria-label="Top">
@@ -25,20 +27,35 @@ export default function Header() {
                 alt=""
               />
             </Link>
-            <div className="hidden ml-10 space-x-8 lg:block">
-              {navigation.map((link) =>
-                link.doctor === doctorMode ? (
-                  <Link key={link.name} href={link.href}>
-                    <a className="text-base font-medium text-white hover:text-indigo-50">
-                      {link.name}
-                    </a>
-                  </Link>
-                ) : null
-              )}
-            </div>
+            {doctorMode && !workerMode ? (
+              <div className="hidden ml-10 space-x-8 lg:block">
+                {navigation.map((link) =>
+                  link.doctor === doctorMode ? (
+                    <Link key={link.name} href={link.href}>
+                      <a className="text-base font-medium text-white hover:text-indigo-50">
+                        {link.name}
+                      </a>
+                    </Link>
+                  ) : null
+                )}
+              </div>
+            ) : null}
+            {!doctorMode && workerMode ? (
+              <div className="hidden ml-10 space-x-8 lg:block">
+                {navigation.map((link) =>
+                  link.worker === workerMode ? (
+                    <Link key={link.name} href={link.href}>
+                      <a className="text-base font-medium text-white hover:text-indigo-50">
+                        {link.name}
+                      </a>
+                    </Link>
+                  ) : null
+                )}
+              </div>
+            ) : null}
           </div>
           <div className="ml-10 space-x-4">
-            {!doctorMode ? (
+            {!doctorMode && !workerMode ? (
               <Link href="/visit/new">
                 <a
                   href="#"

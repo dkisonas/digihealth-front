@@ -3,18 +3,19 @@ import Header from '../components/Header';
 import VisitTable from '../components/VisitTable';
 import { formatVisits } from '../utils/VisitUtils';
 import { fetchJson } from '../utils/HttpUtils';
+import LabTestTable from '../components/LabTestTable';
 
-export default function Home(visits) {
+const viewMode = process.env.NEXT_PUBLIC_VIEW_MODE;
+
+export default function Home(props) {
   return (
     <div>
       <Head>
         <title>DigiHealth</title>
       </Head>
-
       <Header />
-
       <main className="max-w-screen-md mx-auto py-10">
-        <VisitTable visits={visits} />
+        {viewMode === 'worker' ? (<LabTestTable labTest ={ props } />): (<VisitTable visits={ props.visits } />)}
       </main>
     </div>
   );
@@ -24,9 +25,9 @@ const apiUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 export async function getServerSideProps() {
   const userId = process.env.NEXT_PUBLIC_USER_ID;
-  const viewMode = process.env.NEXT_PUBLIC_VIEW_MODE;
 
-  let visits;
+  let visits = [];
+  let labTests = [];
 
   if (viewMode === 'patient') {
     const result = await fetchJson(
@@ -42,6 +43,11 @@ export async function getServerSideProps() {
     visits = await formatVisits(result).then((x) => {
       return x;
     });
+  } else if (viewMode === "worker") {
+    const labTest = await fetchJson(
+      `/LabWorker/get/labTest/byWorkerId?id=${userId}`
+    );
+    labTests = labTest;
   }
-  return { props: { visits } };
+  return { props: { visits, labTests } };
 }
