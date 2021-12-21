@@ -35,9 +35,12 @@ export default function VisitForm(props) {
   return (
     <div>
       <div>
-        <h3 className="text-lg leading-6 font-medium text-gray-900">
-          Vizito Informacija
-        </h3>
+        {visitStatus === 'Occurred' ? (
+          <h3 className="text-lg leading-6 font-medium text-gray-900">
+            Įrašo Informacija
+          </h3>
+        ) : (<h3 className="text-lg leading-6 font-medium text-gray-900">
+          Vizito Informacija </h3>)}
       </div>
       <div className="mt-5 border-t border-gray-200">
         <dl className="sm:divide-y sm:divide-gray-200">
