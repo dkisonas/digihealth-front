@@ -13,19 +13,18 @@ export default function VisitForm(props) {
   const router = useRouter();
   const [visitStatus, setVisitStatus] = useState(props.visit.status);
   const [visit, setVisit] = useState(props.visit);
+  const [medicine] = useState(props.medicine);
 
   async function cancelVisit() {
     let cancelledVisit = formatVisitForRequest({ ...visit });
 
     cancelledVisit.status = 'Occurred';
-    console.log(cancelledVisit);
     await update(`/Visit/update`, cancelledVisit);
     alert('Vizitas atšauktas');
     router.push('/');
   }
 
   const handleVisitStatus = (e) => {
-    console.log(e.target.value);
     setVisitStatus(e.target.value);
   };
 
@@ -105,7 +104,7 @@ export default function VisitForm(props) {
                 </label>
               </div>
             </div>
-            <AddMedicine />
+            <AddMedicine medicine={medicine} />
             <AddLabTests />
           </div>
         ) : null}
