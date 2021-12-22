@@ -15,6 +15,7 @@ const viewMode = process.env.NEXT_PUBLIC_VIEW_MODE;
 export default function Header() {
   const doctorMode = viewMode === "doctor" ? true : false;
   const workerMode = viewMode === "worker" ? true : false;
+
   return (
     <header className="bg-indigo-600">
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" aria-label="Top">
