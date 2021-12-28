@@ -1,14 +1,27 @@
 import { useState } from 'react';
 import AddLabTests from './AddLabTests';
 import AddMedicine from './AddMedicine';
+import ShowLabTests from './ShowLabTests';
 import moment from 'moment';
 import { useRouter } from 'next/router';
 import { update, post } from '../utils/HttpUtils';
 import { formatVisitForRequest } from '../utils/VisitUtils';
 import { v4 as uuid } from 'uuid';
+import PrescriptionTable from './PrescriptionTable';
+
+const labNiuhalas = [
+  { Name: 'testas1', description: 'zdrw1', status: 'Baigtas' },
+  { Name: 'testas2', description: 'zdrw2', status: 'Laukiamas' },
+  { Name: 'testas3', description: 'zdrw3', status: 'Laukiamas' },
+  { Name: 'testas4', description: 'zdrw4', status: 'Baigtas' },
+  { Name: 'testas5', description: 'zdrw5', status: 'Laukiamas' },
+];
 
 const doctorMode =
   process.env.NEXT_PUBLIC_VIEW_MODE === 'doctor' ? true : false;
+
+const patientMode =
+  process.env.NEXT_PUBLIC_VIEW_MODE === 'patient' ? true : false;
 
 export default function VisitForm(props) {
   const router = useRouter();
@@ -21,6 +34,8 @@ export default function VisitForm(props) {
   const [selectedLabTests, setSelectedLabTests] = useState([]);
   const [healthRecordDescription, setVisitDescription] = useState('');
   const [isSms, setIsSms] = useState(false);
+
+  console.log(props);
 
   async function cancelVisit() {
     let cancelledVisit = formatVisitForRequest({ ...visit });
@@ -126,6 +141,10 @@ export default function VisitForm(props) {
     }
   }
 
+  const goBack = () => {
+    router.push('/');
+  };
+
   return (
     <div>
       <div>
@@ -171,29 +190,31 @@ export default function VisitForm(props) {
             </dd>
           </div>
         </dl>
-        <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-          <label
-            htmlFor="country"
-            className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
-          >
-            Statusas
-          </label>
-          <div className="mt-1 sm:mt-0 sm:col-span-2">
-            <select
-              defaultValue={visit.status}
-              disabled={doctorMode ? false : true}
-              onChange={handleVisitStatus}
-              id="country"
-              className="max-w-lg block focus:ring-indigo-500 focus:border-indigo-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+        {!patientMode ? (
+          <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+            <label
+              htmlFor="country"
+              className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
             >
-              <option>Laukiamas</option>
-              <option>Patvirtintas</option>
-              <option>Atšauktas</option>
-              <option>Įvykęs</option>
-            </select>
+              Statusas
+            </label>
+            <div className="mt-1 sm:mt-0 sm:col-span-2">
+              <select
+                defaultValue={visit.status}
+                disabled={doctorMode ? false : true}
+                onChange={handleVisitStatus}
+                id="country"
+                className="max-w-lg block focus:ring-indigo-500 focus:border-indigo-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+              >
+                <option>Laukiamas</option>
+                <option>Patvirtintas</option>
+                <option>Atšauktas</option>
+                <option>Įvykęs</option>
+              </select>
+            </div>
           </div>
-        </div>
-        {visitStatus === 'Įvykęs' ? (
+        ) : null}
+        {visitStatus === 'Įvykęs' && doctorMode ? (
           <div>
             <div className="py-4 sm:py-5 sm:gnrid sm:grid-cols-3 sm:gap-4">
               <dt className="text-sm font-medium text-gray-500">
@@ -234,7 +255,12 @@ export default function VisitForm(props) {
         ) : null}
       </div>
 
-      {!doctorMode && visitStatus !== 'Įvykęs' ? (
+      {patientMode && visitStatus === 'Įvykęs' ? (
+        <div>
+          <ShowLabTests labTest={labNiuhalas} />
+        </div>
+      ) : null}
+      {visitStatus !== 'Įvykęs' ? (
         <div className="flex justify-center py-10">
           <button
             type="button"
@@ -244,17 +270,19 @@ export default function VisitForm(props) {
             Atšaukti vizitą
           </button>
         </div>
-      ) : (
+      ) : null}
+      {patientMode && visitStatus === 'Įvykęs' ? (
         <div className="flex justify-center py-10">
           <button
             onClick={saveVisit}
             type="button"
             className="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            onClick={goBack}
           >
-            Išsaugoti
+            Atgal
           </button>
         </div>
-      )}
+      ) : null}
     </div>
   );
 }
