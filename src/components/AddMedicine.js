@@ -4,7 +4,9 @@ import { useState } from 'react';
 export default function AddMedicine(props) {
   const [selectedMedicines, setSelectedMedicines] = useState([]);
   const [allMedicineList] = useState(props.medicine);
-  const [selectedMedicine, setSelectedMedicine] = useState(allMedicineList[0]);
+  const [selectedMedicine, setSelectedMedicine] = useState(
+    allMedicineList[0].id
+  );
   const [usingTimes, setUsingTimes] = useState('');
 
   const handleUsingTimes = (e) => {
@@ -24,9 +26,13 @@ export default function AddMedicine(props) {
     if (selectedMedicines.find((x) => x.med.id === selectedMedicine)) {
       return;
     }
-
-    console.log(medicine);
     setSelectedMedicines(selectedMedicines.concat(medicine));
+  };
+
+  const deleteMedicine = (id) => {
+    const newMeds = [...selectedMedicines];
+    const result = newMeds.filter((x) => x.med.id !== id);
+    setSelectedMedicines(result);
   };
 
   return (
@@ -110,13 +116,16 @@ export default function AddMedicine(props) {
                         className={medIdx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}
                       >
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                          {med?.name}
+                          {med.name}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                           {times}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                          <div className="text-indigo-600 hover:text-indigo-900 link">
+                          <div
+                            onClick={() => deleteMedicine(med.id)}
+                            className="text-indigo-600 hover:text-indigo-900 link"
+                          >
                             Ištrinti
                           </div>
                         </td>

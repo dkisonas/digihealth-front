@@ -139,6 +139,7 @@ export default function VisitForm(props) {
           </div>
         </div> ) : null }
         {visitStatus === 'Įvykęs' && doctorMode ? (
+
           <div>
             <div className="relative flex items-start mt-5">
               <div className="flex items-center h-5">
@@ -161,12 +162,14 @@ export default function VisitForm(props) {
           </div>
         ) : null}
       </div>
+
       {patientMode && visitStatus === 'Įvykęs' ? (
         <div>
           <ShowLabTests labTest={labNiuhalas}/>
           </div>
       ) : null}
       {visitStatus !== 'Įvykęs' ? (
+
         <div className="flex justify-center py-10">
           <button
             type="button"
