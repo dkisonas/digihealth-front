@@ -29,6 +29,12 @@ export default function AddMedicine(props) {
     setSelectedMedicines(selectedMedicines.concat(medicine));
   };
 
+  const deleteMedicine = (id) => {
+    const newMeds = [...selectedMedicines];
+    const result = newMeds.filter((x) => x.med.id !== id);
+    setSelectedMedicines(result);
+  };
+
   return (
     <div className="text-center border mt-6 py-6">
       <div className="mb-6">
@@ -116,7 +122,10 @@ export default function AddMedicine(props) {
                           {times}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                          <div className="text-indigo-600 hover:text-indigo-900 link">
+                          <div
+                            onClick={() => deleteMedicine(med.id)}
+                            className="text-indigo-600 hover:text-indigo-900 link"
+                          >
                             Ištrinti
                           </div>
                         </td>
