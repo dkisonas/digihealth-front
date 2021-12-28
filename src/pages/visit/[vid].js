@@ -32,7 +32,6 @@ export async function getServerSideProps({ query }) {
   const record = await fetchJson(
     `/HealthRecord/get/byVisit?visitId=${visitId}`
   );
-  console.log(record);
 
   return { props: { visit, medicine, record } };
 }

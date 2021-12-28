@@ -26,13 +26,16 @@ export default function AddMedicine(props) {
     if (selectedMedicines.find((x) => x.med.id === selectedMedicine)) {
       return;
     }
-    setSelectedMedicines(selectedMedicines.concat(medicine));
+    const result = selectedMedicines.concat(medicine);
+    setSelectedMedicines(result);
+    props.onChange(result);
   };
 
   const deleteMedicine = (id) => {
     const newMeds = [...selectedMedicines];
     const result = newMeds.filter((x) => x.med.id !== id);
     setSelectedMedicines(result);
+    props.onChange(result);
   };
 
   return (
@@ -93,13 +96,13 @@ export default function AddMedicine(props) {
                     <tr>
                       <th
                         scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        className="text-center px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                       >
                         Pavadinimas
                       </th>
                       <th
                         scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        className="text-center px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                       >
                         Vartojimo laikai
                       </th>
