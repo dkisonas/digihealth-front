@@ -1,4 +1,3 @@
-import moment from 'moment';
 import Link from 'next/link';
 import { useState } from 'react';
 import { fetchJson } from '../utils/HttpUtils'
@@ -6,32 +5,28 @@ import { fetchJson } from '../utils/HttpUtils'
 const userId = process.env.NEXT_PUBLIC_USER_ID;
 
 export default function LabTestTable(props) {
-
-  const testStatus = [
-  { name: "Aktyvus", value: 0 },
-  { name: "Įvykdytas", value: 1 },
-  ];
-
-
-
-  const { labTests } = props.labTest;
-  const [viewStatus, setViewStatus] = useState();
+  const [ labTests, setLabTest ] = useState(Array.prototype.slice.call(props.labTest));
 
   const handleChangesOfView = (e) => {
     loadByStatus(e.target.value);
   };
 
   async function loadByStatus(viewStatus) {
-    console.log(testStatus[1].value);
-    //fetchJson(`/LabWorker/get/labTest/byIdAndStatus?workerId=${userId}&&status=${testStatus.find()}`)
+    let items = [];
+    if (viewStatus === "Aktyvius") {
+      items = await fetchJson(`/LabWorker/get/labTest/byIdAndStatus?workerId=${userId}&&status=1`)
+    } else {
+      items = await fetchJson(`/LabWorker/get/labTest/byIdAndStatus?workerId=${userId}&&status=0`)
+    }
+    setLabTest(items);
   }
 
   return (
     <div className="flex flex-col">
       <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-          <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-            <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 mb-10">
+          <div className="shadow overflow-hidden sm:rounded-lg">
+            <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5 mb-10">
               <label
                 htmlFor="country"
                 className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
