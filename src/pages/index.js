@@ -45,7 +45,7 @@ export async function getServerSideProps() {
     });
   } else if (viewMode === "worker") {
     const labTest = await fetchJson(
-      `/LabWorker/get/labTest/byWorkerId?id=${userId}`
+      `/LabWorker/get/labTest/byIdAndStatus?workerid=${userId}&&status=1`
     );
     labTests = labTest;
   }

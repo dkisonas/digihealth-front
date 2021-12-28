@@ -5,8 +5,7 @@ import { fetchJson } from '../utils/HttpUtils'
 const userId = process.env.NEXT_PUBLIC_USER_ID;
 
 export default function LabTestTable(props) {
-  const [labTests, setLabTest] = useState(Array.prototype.slice.call(props.labTest));
-
+  const [labTests, setLabTest] = useState(props.labTest.labTests);
   const handleChangesOfView = (e) => {
     loadByStatus(e.target.value);
   };
@@ -25,7 +24,7 @@ export default function LabTestTable(props) {
     <div className="flex flex-col">
       <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-          <div className="shadow overflow-hidden sm:rounded-lg">
+          <div className="overflow-hidden sm:rounded-lg">
             <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5 mb-10">
               <label
                 htmlFor="country"
