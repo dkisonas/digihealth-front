@@ -1,11 +1,12 @@
+import { useState } from 'react';
 import moment from 'moment';
 import Link from 'next/link';
-import { useState } from 'react';
 
 const dateFormat = 'yyyy-MM-DD';
 
 export default function PatientRecordsTable(props) {
   const [records] = useState(props.records);
+  console.log(records);
 
   return (
     <div className="flex flex-col">

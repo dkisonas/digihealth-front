@@ -43,7 +43,7 @@ export default function PatientTable(props) {
                     </td>
 
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <Link href="/patient">
+                      <Link href={`/patients/${patient.id}`}>
                         <div className="text-indigo-600 hover:text-indigo-900 link">
                           Atidaryti
                         </div>

@@ -1,6 +1,6 @@
-import Header from '../components/Header';
-import PatientTable from '../components/PatientTable';
-import { fetchJson } from '../utils/HttpUtils';
+import Header from '../../components/Header';
+import PatientTable from '../../components/PatientTable';
+import { fetchJson } from '../../utils/HttpUtils';
 
 function Patients(patients) {
   return (

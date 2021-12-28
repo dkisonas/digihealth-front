@@ -1,10 +1,10 @@
-import VisitTable from "../components/VisitTable";
-import PatientRecordsTable from "./PatientRecordsTable";
+import PatientRecordsTable from './PatientRecordsTable';
+import { useState } from 'react';
+import moment from 'moment';
 
-const doctorMode =
-  process.env.NEXT_PUBLIC_VIEW_MODE === "doctor" ? true : false;
-
-export default function PatientForm() {
+export default function PatientForm(props) {
+  const [patient] = useState(props.patient);
+  console.log(props);
   return (
     <div>
       <div>
@@ -19,17 +19,17 @@ export default function PatientForm() {
               Vardas Pavardė
             </dt>
             <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-              Jonas Jonaitis
+              {`${patient.firstName} ${patient.lastName}`}
             </dd>
           </div>
           <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4">
             <dt className="text-sm font-medium text-gray-500">Gimimo Data</dt>
             <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-              1969-01-01
+              {moment(patient.birthday).format('yyyy-MM-DD hh:mm')}
             </dd>
           </div>
         </dl>
-        <PatientRecordsTable />
+        <PatientRecordsTable records={props.records} />
       </div>
     </div>
   );
