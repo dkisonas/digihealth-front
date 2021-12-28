@@ -1,10 +1,13 @@
 
 import Link from 'next/link';
+import { useState } from 'react';
 
 export default function ShowLabTests(props) {
 
-    const labTests = props.labTest;
-    
+    const [labTests] = useState(props.labTest);
+    console.log(labTests);
+
+
     return (
         <div className="flex flex-col">
             <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">

@@ -10,11 +10,11 @@ import { v4 as uuid } from 'uuid';
 import PrescriptionTable from './PrescriptionTable';
 
 const labNiuhalas = [
-  { Name: 'testas1', description: 'zdrw1', status: 'Baigtas' },
-  { Name: 'testas2', description: 'zdrw2', status: 'Laukiamas' },
-  { Name: 'testas3', description: 'zdrw3', status: 'Laukiamas' },
-  { Name: 'testas4', description: 'zdrw4', status: 'Baigtas' },
-  { Name: 'testas5', description: 'zdrw5', status: 'Laukiamas' },
+  {Name: "testas1", description: "zdrw1", status: "Baigtas"},
+  {Name: "testas2", description: "zdrw2", status: "Laukiamas"},
+  {Name: "testas3", description: "zdrw3", status: "Laukiamas"},
+  {Name: "testas4", description: "zdrw4", status: "Baigtas"},
+  {Name: "testas5", description: "zdrw5", status: "Laukiamas"},
 ];
 
 const doctorMode =
@@ -27,7 +27,6 @@ export default function VisitForm(props) {
   const router = useRouter();
   const [visitStatus, setVisitStatus] = useState(props.visit.status);
   const [visit, setVisit] = useState(props.visit);
-  const [record, setRecord] = useState(props.record[0]);
   const [medicine] = useState(props.medicine);
   const [allMedicine] = useState(props.medicine);
   const [selectedMedicines, setSelectedMedicines] = useState([]);
@@ -35,7 +34,11 @@ export default function VisitForm(props) {
   const [healthRecordDescription, setVisitDescription] = useState('');
   const [isSms, setIsSms] = useState(false);
 
-  console.log(props);
+
+  if(visitStatus === "Įvykęs") {
+    const [labTests, setLabTests] = useState(props.record[0].labTests);
+    const [record, setRecord] = useState(props.record[0]); 
+  }
 
   async function cancelVisit() {
     let cancelledVisit = formatVisitForRequest({ ...visit });
@@ -254,10 +257,9 @@ export default function VisitForm(props) {
           </div>
         ) : null}
       </div>
-
       {patientMode && visitStatus === 'Įvykęs' ? (
         <div>
-          <ShowLabTests labTest={labNiuhalas} />
+          <ShowLabTests labTest={labTests} />
         </div>
       ) : null}
       {visitStatus !== 'Įvykęs' ? (
