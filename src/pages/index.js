@@ -15,7 +15,7 @@ export default function Home(props) {
       </Head>
       <Header />
       <main className="max-w-screen-md mx-auto py-10">
-        {viewMode === 'worker' ? (<LabTestTable labTest ={ props } />): (<VisitTable visits={ props.visits } />)}
+        {viewMode === 'worker' ? (<LabTestTable labTest ={ props } />): (<VisitTable visits={ props } />)}
       </main>
     </div>
   );
@@ -45,7 +45,7 @@ export async function getServerSideProps() {
     });
   } else if (viewMode === "worker") {
     const labTest = await fetchJson(
-      `/LabWorker/get/labTest/byWorkerId?id=${userId}`
+      `/LabWorker/get/labTest/byIdAndStatus?workerid=${userId}&&status=1`
     );
     labTests = labTest;
   }

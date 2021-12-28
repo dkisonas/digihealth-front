@@ -7,7 +7,8 @@ const navigation = [
   { name: "Ligos istorija", href: "/visit/history", doctor: false },
   { name: "Mano duomenys", href: "/user", doctor: false },
   { name: "Mano pacientai", href: "/patients", doctor: true },
-  { name: "Tyrimai", href: "/labtests", worker: true }
+  { name: "Tyrimai", href: "/", worker: true },
+  { name: "Mano duomenys", href: "/user", worker: true}
 ];
 
 const viewMode = process.env.NEXT_PUBLIC_VIEW_MODE;
@@ -15,6 +16,7 @@ const viewMode = process.env.NEXT_PUBLIC_VIEW_MODE;
 export default function Header() {
   const doctorMode = viewMode === "doctor" ? true : false;
   const workerMode = viewMode === "worker" ? true : false;
+
   return (
     <header className="bg-indigo-600">
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" aria-label="Top">
@@ -76,7 +78,20 @@ export default function Header() {
         </div>
         <div className="py-4 flex flex-wrap justify-center space-x-6 lg:hidden">
           {navigation.map((link) =>
-            link.doctor === doctorMode ? (
+            link.doctor === doctorMode && !workerMode ? (
+              <a
+                key={link.name}
+                href={link.href}
+                className="text-base font-medium text-white hover:text-indigo-50"
+              >
+                {link.name}
+              </a>
+            ) : null
+          )}
+        </div>
+        <div className="py-4 flex flex-wrap justify-center space-x-6 lg:hidden">
+          {navigation.map((link) =>
+            link.worker === workerMode ? (
               <a
                 key={link.name}
                 href={link.href}

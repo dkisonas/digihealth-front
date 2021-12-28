@@ -32,6 +32,7 @@ export default function VisitRegistrationForm() {
     const endDateTime = moment(startDateTime)
       .add(30, 'minutes')
       .format(dateFormat);
+    console.log(`start ${startDateTime} end ${endDateTime}`);
     const visit = {
       id: visitId,
       name: 'Vizitas',
@@ -42,13 +43,18 @@ export default function VisitRegistrationForm() {
       patientId: '0411e8d3-7864-4459-bbe7-27940a0293cf',
       doctorId: doctor.id,
     };
+    console.log('printing visit object:');
+    console.log(visit);
     const res = await axios.post(`${apiUrl}/Visit/create`, visit);
     const { result } = await res.data;
+    console.log('printing result from server object:');
+    console.log(result);
     alert('Vizitas sėkmingai užregistruotas');
     router.push('/');
   }
 
   const handleDescription = (e) => {
+    console.log(e.target.value);
     setDescription(e.target.value);
   };
 
@@ -58,6 +64,7 @@ export default function VisitRegistrationForm() {
 
   const handleDoctor = (e) => {
     const { id, fullName } = JSON.parse(e.target.value);
+    console.log(id);
     setDoctor({ id, fullName });
   };
 
