@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import moment from 'moment';
 import { useRouter } from 'next/router';
 import { update } from '../utils/HttpUtils';
 
 const userId = process.env.NEXT_PUBLIC_USER_ID;
+const workerMode = process.env.NEXT_PUBLIC_VIEW_MODE === 'worker' ? true : false;
+const patientMode = process.env.NEXT_PUBLIC_VIEW_MODE === 'patient' ? true : false;
 
 export default function LabTestForm(props) {
     const router = useRouter();
@@ -27,10 +28,14 @@ export default function LabTestForm(props) {
             status: testStatus,
             labWorkerId: userId
         };
-        
+
         await update(`/LabWorker/update/labTest`, newTest);
         router.push('/');
     }
+
+    const goBack = () => {
+        router.push('/');
+    };
 
     return (
         <div>
@@ -64,25 +69,36 @@ export default function LabTestForm(props) {
                 </div>
             </div>
             <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-          <label
-            htmlFor="country"
-            className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
-          >
-            Statusas
-          </label>
-          <div className="mt-1 sm:mt-0 sm:col-span-2">
-            <select
-              defaultValue={labTest.status}
-              onChange={handleTestStatus}
-              id="country"
-              className="max-w-lg block focus:ring-indigo-500 focus:border-indigo-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
-            >
-              <option>Laukiamas</option>
-              <option>Įvykdytas</option>
-            </select>
-          </div>
-        </div>
-            <div className="pt-5">
+                <label
+                    htmlFor="country"
+                    className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
+                >
+                    Statusas
+                </label>
+                {workerMode ? (<div className="mt-1 sm:mt-0 sm:col-span-2">
+                    <select
+                        defaultValue={labTest.status}
+                        onChange={handleTestStatus}
+                        id="country"
+                        className="max-w-lg block focus:ring-indigo-500 focus:border-indigo-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                    >
+                        <option>Laukiamas</option>
+                        <option>Įvykdytas</option>
+                    </select>
+                </div>) : null}
+                {workerMode ? (<div className="mt-1 sm:mt-0 sm:col-span-2">
+                    <select
+                        defaultValue={labTest.status}
+                        onChange={handleTestStatus}
+                        id="country"
+                        className="max-w-lg block focus:ring-indigo-500 focus:border-indigo-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                    >
+                        <option>Laukiamas</option>
+                        <option>Įvykdytas</option>
+                    </select>
+                </div>) : null}
+            </div>
+            {workerMode ? (<div className="pt-5">
                 <div className="flex justify-end">
                     <button
                         type="button"
@@ -101,7 +117,20 @@ export default function LabTestForm(props) {
                         Atšaukti
                     </button>
                 </div>
-            </div>
+            </div>) : null}
+            {patientMode ? (
+                <div className="pt-5">
+                    <div className="flex justify-end">
+                        <button
+                            type="button"
+                            onClick={goBack}
+                            className="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        >
+                            Atgal
+                        </button>
+                    </div>
+                </div>
+            ) : null}
         </div>
     );
 }

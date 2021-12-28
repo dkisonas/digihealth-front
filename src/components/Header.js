@@ -2,20 +2,23 @@ import Link from "next/link";
 
 const navigation = [
   { name: "Mano vizitai", href: "/", doctor: true },
-  { name: "Mano vizitai", href: "/", doctor: false },
-  { name: "Receptai", href: "/prescription", doctor: false },
-  { name: "Ligos istorija", href: "/visit/history", doctor: false },
-  { name: "Mano duomenys", href: "/user", doctor: false },
+  { name: "Mano vizitai", href: "/", patient: true },
+  { name: "Receptai", href: "/prescription", patient: true },
+  { name: "Ligos istorija", href: "/visit/history", patient: true },
+  { name: "Mano duomenys", href: "/user", patient: true },
   { name: "Mano pacientai", href: "/patients", doctor: true },
   { name: "Tyrimai", href: "/", worker: true },
-  { name: "Mano duomenys", href: "/user", worker: true}
+  { name: "Mano duomenys", href: "/user", worker: true },
+  { name: "Mano duomenys", href: "/user", doctor: true }
 ];
 
 const viewMode = process.env.NEXT_PUBLIC_VIEW_MODE;
 
 export default function Header() {
+
   const doctorMode = viewMode === "doctor" ? true : false;
   const workerMode = viewMode === "worker" ? true : false;
+  const patientMode = viewMode === "patient" ? true: false;
 
   return (
     <header className="bg-indigo-600">
@@ -29,7 +32,7 @@ export default function Header() {
                 alt=""
               />
             </Link>
-            {doctorMode && !workerMode ? (
+            {doctorMode && !workerMode && !patientMode ? (
               <div className="hidden ml-10 space-x-8 lg:block">
                 {navigation.map((link) =>
                   link.doctor === doctorMode ? (
@@ -42,10 +45,23 @@ export default function Header() {
                 )}
               </div>
             ) : null}
-            {!doctorMode && workerMode ? (
+            {!doctorMode && workerMode && !patientMode ? (
               <div className="hidden ml-10 space-x-8 lg:block">
                 {navigation.map((link) =>
                   link.worker === workerMode ? (
+                    <Link key={link.name} href={link.href}>
+                      <a className="text-base font-medium text-white hover:text-indigo-50">
+                        {link.name}
+                      </a>
+                    </Link>
+                  ) : null
+                )}
+              </div>
+            ) : null}
+            {!doctorMode && !workerMode ? (
+              <div className="hidden ml-10 space-x-8 lg:block">
+                {navigation.map((link) =>
+                  link.patient === patientMode ? (
                     <Link key={link.name} href={link.href}>
                       <a className="text-base font-medium text-white hover:text-indigo-50">
                         {link.name}
@@ -79,6 +95,19 @@ export default function Header() {
         <div className="py-4 flex flex-wrap justify-center space-x-6 lg:hidden">
           {navigation.map((link) =>
             link.doctor === doctorMode && !workerMode ? (
+              <a
+                key={link.name}
+                href={link.href}
+                className="text-base font-medium text-white hover:text-indigo-50"
+              >
+                {link.name}
+              </a>
+            ) : null
+          )}
+        </div>
+        <div className="py-4 flex flex-wrap justify-center space-x-6 lg:hidden">
+          {navigation.map((link) =>
+            link.patient === patientMode ?  (
               <a
                 key={link.name}
                 href={link.href}
