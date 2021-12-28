@@ -25,7 +25,7 @@ export default function PrescriptionTable(props) {
                 </tr>
               </thead>
                <tbody>
-                {prescription.map((recipe, recipeId) => (
+                {/* {prescription.map((recipe, recipeId) => (
                   <tr
                     key={recipe.id}
                     className={recipeId % 2 === 0 ? 'bg-white' : 'bg-gray-50'}
@@ -41,7 +41,7 @@ export default function PrescriptionTable(props) {
                       </Link>
                     </td>
                   </tr>
-                ))}
+                ))} */}
               </tbody> 
             </table>
           </div>

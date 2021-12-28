@@ -37,7 +37,7 @@ export default function VisitRegistrationForm() {
       id: visitId,
       name: 'Vizitas',
       description: description,
-      status: 'Pending',
+      status: 'Laukiamas',
       startDate: startDateTime,
       endDate: endDateTime,
       patientId: '0411e8d3-7864-4459-bbe7-27940a0293cf',

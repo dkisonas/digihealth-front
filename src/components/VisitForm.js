@@ -1,13 +1,30 @@
 import { useState } from 'react';
 import AddLabTests from './AddLabTests';
 import AddMedicine from './AddMedicine';
+import ShowLabTests from './ShowLabTests';
 import moment from 'moment';
 import { useRouter } from 'next/router';
 import { update } from '../utils/HttpUtils';
 import { formatVisitForRequest } from '../utils/VisitUtils';
+import PrescriptionTable from './PrescriptionTable'
+
+
+const labNiuhalas = [
+  {Name: "testas1", description: "zdrw1", status: "Baigtas"},
+  {Name: "testas2", description: "zdrw2", status: "Laukiamas"},
+  {Name: "testas3", description: "zdrw3", status: "Laukiamas"},
+  {Name: "testas4", description: "zdrw4", status: "Baigtas"},
+  {Name: "testas5", description: "zdrw5", status: "Laukiamas"},
+];
+
+
+
 
 const doctorMode =
   process.env.NEXT_PUBLIC_VIEW_MODE === 'doctor' ? true : false;
+
+const patientMode = 
+  process.env.NEXT_PUBLIC_VIEW_MODE === 'patient' ? true : false;
 
 export default function VisitForm(props) {
   const router = useRouter();
@@ -18,10 +35,11 @@ export default function VisitForm(props) {
   const [allMedicine] = useState(props.medicine);
   const [selectedMedicines, setSelectedMedicines] = useState([]);
 
+  console.log(props);
+
   async function cancelVisit() {
     let cancelledVisit = formatVisitForRequest({ ...visit });
-
-    cancelledVisit.status = 'Įvykęs';
+    cancelledVisit.status = 'Atšauktas';
     await update(`/Visit/update`, cancelledVisit);
     alert('Vizitas atšauktas');
     router.push('/');
@@ -35,6 +53,10 @@ export default function VisitForm(props) {
     let tempMedicines = selectedMedicines;
     tempMedicines.push(medicine);
     setSelectedMedicines(tempMedicines);
+  };
+
+  const goBack = () => {
+    router.push('/');
   };
 
   return (
@@ -93,6 +115,7 @@ export default function VisitForm(props) {
             </div>
           ) : null}
         </dl>
+        {!patientMode ? (
         <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
           <label
             htmlFor="country"
@@ -114,8 +137,9 @@ export default function VisitForm(props) {
               <option>Įvykęs</option>
             </select>
           </div>
-        </div>
-        {visitStatus === 'Įvykęs' ? (
+        </div> ) : null }
+        {visitStatus === 'Įvykęs' && doctorMode ? (
+
           <div>
             <div className="relative flex items-start mt-5">
               <div className="flex items-center h-5">
@@ -139,7 +163,13 @@ export default function VisitForm(props) {
         ) : null}
       </div>
 
-      {!doctorMode && visitStatus !== 'Įvykęs' ? (
+      {patientMode && visitStatus === 'Įvykęs' ? (
+        <div>
+          <ShowLabTests labTest={labNiuhalas}/>
+          </div>
+      ) : null}
+      {visitStatus !== 'Įvykęs' ? (
+
         <div className="flex justify-center py-10">
           <button
             type="button"
@@ -149,16 +179,18 @@ export default function VisitForm(props) {
             Atšaukti vizitą
           </button>
         </div>
-      ) : (
+      ) : null} 
+      {patientMode && visitStatus === 'Įvykęs' ? (
         <div className="flex justify-center py-10">
           <button
             type="button"
             className="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            onClick={goBack}
           >
-            Išsaugoti
+            Atgal
           </button>
         </div>
-      )}
+      ): null}
     </div>
   );
 }
