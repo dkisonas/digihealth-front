@@ -21,7 +21,7 @@ export default function VisitForm(props) {
   async function cancelVisit() {
     let cancelledVisit = formatVisitForRequest({ ...visit });
 
-    cancelledVisit.status = 'Occurred';
+    cancelledVisit.status = 'Įvykęs';
     await update(`/Visit/update`, cancelledVisit);
     alert('Vizitas atšauktas');
     router.push('/');
@@ -40,7 +40,7 @@ export default function VisitForm(props) {
   return (
     <div>
       <div>
-        {visitStatus === 'Occurred' ? (
+        {visitStatus === 'Įvykęs' ? (
           <h3 className="text-lg leading-6 font-medium text-gray-900">
             Įrašo Informacija
           </h3>
@@ -81,7 +81,7 @@ export default function VisitForm(props) {
               {visit.description}
             </dd>
           </div>
-          {visitStatus === 'Occurred' ? (
+          {visitStatus === 'Įvykęs' ? (
             <div className="py-4 sm:py-5 sm:gnrid sm:grid-cols-3 sm:gap-4">
               <dt className="text-sm font-medium text-gray-500">
                 {' '}
@@ -108,14 +108,14 @@ export default function VisitForm(props) {
               id="country"
               className="max-w-lg block focus:ring-indigo-500 focus:border-indigo-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
             >
-              <option>Pending</option>
-              <option>Approved</option>
-              <option>Canceled</option>
-              <option>Occurred</option>
+              <option>Laukiamas</option>
+              <option>Patvirtintas</option>
+              <option>Atšauktas</option>
+              <option>Įvykęs</option>
             </select>
           </div>
         </div>
-        {visitStatus === 'Occurred' ? (
+        {visitStatus === 'Įvykęs' ? (
           <div>
             <div className="relative flex items-start mt-5">
               <div className="flex items-center h-5">
@@ -139,7 +139,7 @@ export default function VisitForm(props) {
         ) : null}
       </div>
 
-      {!doctorMode && visitStatus !== 'Occurred' ? (
+      {!doctorMode && visitStatus !== 'Įvykęs' ? (
         <div className="flex justify-center py-10">
           <button
             type="button"
