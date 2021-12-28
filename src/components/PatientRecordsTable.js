@@ -1,12 +1,11 @@
 import moment from 'moment';
 import Link from 'next/link';
+import { useState } from 'react';
 
 const dateFormat = 'yyyy-MM-DD';
 
 export default function PatientRecordsTable(props) {
-
-  const records = props.records;
-
+  const [records] = useState(props.records);
 
   return (
     <div className="flex flex-col">
@@ -37,7 +36,7 @@ export default function PatientRecordsTable(props) {
                 {records.map((record, recordId) => (
                   <tr
                     key={record.id}
-                    className={recordId % 2 === 0 ? "bg-white" : "bg-gray-50"}
+                    className={recordId % 2 === 0 ? 'bg-white' : 'bg-gray-50'}
                   >
                     <td className="px-6 py-4 whitespace-wrap text-sm font-medium text-gray-900">
                       {record.description}

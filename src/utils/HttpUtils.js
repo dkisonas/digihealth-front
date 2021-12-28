@@ -34,8 +34,7 @@ async function update(url, body) {
 
 async function post(url, body) {
   const res = await axios.post(`${apiUrl}${url}`, body);
-  const { result } = await res.data;
-  return result;
+  return res.data;
 }
 
 export { fetchJson, update, post };

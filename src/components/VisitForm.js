@@ -119,6 +119,10 @@ export default function VisitForm(props) {
       };
       console.log(healthRecord);
       const result = await post('/HealthRecord/create', healthRecord);
+      if (result.success === true) {
+        alert('Ligos istorijos įrašas sukurtas');
+        router.push('/');
+      }
     }
   }
 
