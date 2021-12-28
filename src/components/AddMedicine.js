@@ -2,12 +2,15 @@ import { PlusIcon } from '@heroicons/react/solid';
 import { useState } from 'react';
 
 export default function AddMedicine(props) {
+  console.log(props);
   const [selectedMedicines, setSelectedMedicines] = useState([]);
   const [allMedicineList] = useState(props.medicine);
   const [selectedMedicine, setSelectedMedicine] = useState(
     allMedicineList[0].id
   );
   const [usingTimes, setUsingTimes] = useState('');
+
+
 
   const handleUsingTimes = (e) => {
     setUsingTimes(e.target.value);

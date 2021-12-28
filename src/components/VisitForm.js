@@ -9,13 +9,6 @@ import { formatVisitForRequest } from '../utils/VisitUtils';
 import { v4 as uuid } from 'uuid';
 import PrescriptionTable from './PrescriptionTable';
 
-const labNiuhalas = [
-  {Name: "testas1", description: "zdrw1", status: "Baigtas"},
-  {Name: "testas2", description: "zdrw2", status: "Laukiamas"},
-  {Name: "testas3", description: "zdrw3", status: "Laukiamas"},
-  {Name: "testas4", description: "zdrw4", status: "Baigtas"},
-  {Name: "testas5", description: "zdrw5", status: "Laukiamas"},
-];
 
 const doctorMode =
   process.env.NEXT_PUBLIC_VIEW_MODE === 'doctor' ? true : false;
@@ -34,15 +27,12 @@ export default function VisitForm(props) {
   const [healthRecordDescription, setVisitDescription] = useState('');
   const [isSms, setIsSms] = useState(false);
 
-
-  if(visitStatus === "Įvykęs") {
-    const [labTests, setLabTests] = useState(props.record[0].labTests);
-    const [record, setRecord] = useState(props.record[0]); 
-  }
+  const [prescriptions, setPrescriptions ] = useState(props.record[0].prescriptions ?? []);
+  const [labTests, setLabTests] = useState(props.record[0].labTests ?? []);
+  const [record, setRecord] = useState(props.record[0] ?? []); 
 
   async function cancelVisit() {
     let cancelledVisit = formatVisitForRequest({ ...visit });
-
     cancelledVisit.status = 'Atšauktas';
     await update(`/Visit/update`, cancelledVisit);
     alert('Vizitas atšauktas');
@@ -193,7 +183,7 @@ export default function VisitForm(props) {
             </dd>
           </div>
         </dl>
-        {!patientMode ? (
+        {!patientMode && visitStatus !== 'Įvykęs' ? (
           <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
             <label
               htmlFor="country"
@@ -217,7 +207,7 @@ export default function VisitForm(props) {
             </div>
           </div>
         ) : null}
-        {visitStatus === 'Įvykęs' && doctorMode ? (
+        {visitStatus !== 'Įvykęs' ? (
           <div>
             <div className="py-4 sm:py-5 sm:gnrid sm:grid-cols-3 sm:gap-4">
               <dt className="text-sm font-medium text-gray-500">
@@ -253,13 +243,22 @@ export default function VisitForm(props) {
               </div>
             </div>
             <AddMedicine medicine={allMedicine} onChange={handleMedicine} />
+            <div className="ml-3 text-sm">
+              </div>
             <AddLabTests onChange={handleLabTests} />
           </div>
         ) : null}
       </div>
-      {patientMode && visitStatus === 'Įvykęs' ? (
+      {patientMode || doctorMode  && visitStatus === 'Įvykęs' ? (
         <div>
+             <label htmlFor="comments" className="font-medium text-gray-700">
+                  Tyrimai 
+                </label>
           <ShowLabTests labTest={labTests} />
+          <label htmlFor="comments" className="font-medium text-gray-700">
+                  Receptai 
+                </label>
+          <PrescriptionTable prescription={prescriptions}/>
         </div>
       ) : null}
       {visitStatus !== 'Įvykęs' ? (
@@ -273,7 +272,7 @@ export default function VisitForm(props) {
           </button>
         </div>
       ) : null}
-      {patientMode && visitStatus === 'Įvykęs' ? (
+      {patientMode || doctorMode && visitStatus === 'Įvykęs' ? (
         <div className="flex justify-center py-10">
           <button
             onClick={saveVisit}
