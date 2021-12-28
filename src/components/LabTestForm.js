@@ -40,7 +40,7 @@ export default function LabTestForm(props) {
             <div className="py-4 sm:py-5 sm:gnrid sm:grid-cols-3 sm:gap-4">
                 <dt className="text-sm font-medium text-gray-500 mb-5">
                     {' '}
-                    Testo aprašymas
+                    Tyrimo aprašymas
                 </dt>
                 <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                     {labTest.description}
@@ -77,8 +77,8 @@ export default function LabTestForm(props) {
               id="country"
               className="max-w-lg block focus:ring-indigo-500 focus:border-indigo-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
             >
-              <option>Pending</option>
-              <option>Completed</option>
+              <option>Laukiamas</option>
+              <option>Įvykdytas</option>
             </select>
           </div>
         </div>

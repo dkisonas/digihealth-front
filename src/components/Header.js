@@ -7,7 +7,8 @@ const navigation = [
   { name: "Ligos istorija", href: "/visit/history", doctor: false },
   { name: "Mano duomenys", href: "/user", doctor: false },
   { name: "Mano pacientai", href: "/patients", doctor: true },
-  { name: "Tyrimai", href: "/labtests", worker: true }
+  { name: "Tyrimai", href: "/labtests", worker: true },
+  { name: "Mano duomenys", href: "/user", worker: true}
 ];
 
 const viewMode = process.env.NEXT_PUBLIC_VIEW_MODE;

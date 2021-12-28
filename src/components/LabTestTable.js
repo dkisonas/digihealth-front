@@ -5,7 +5,7 @@ import { fetchJson } from '../utils/HttpUtils'
 const userId = process.env.NEXT_PUBLIC_USER_ID;
 
 export default function LabTestTable(props) {
-  const [ labTests, setLabTest ] = useState(Array.prototype.slice.call(props.labTest));
+  const [labTests, setLabTest] = useState(Array.prototype.slice.call(props.labTest));
 
   const handleChangesOfView = (e) => {
     loadByStatus(e.target.value);
