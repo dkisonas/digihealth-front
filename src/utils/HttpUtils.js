@@ -1,5 +1,4 @@
 import axios from 'axios';
-
 const apiUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 async function fetchJson(url) {

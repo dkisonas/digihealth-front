@@ -4,7 +4,7 @@ const navigation = [
   { name: "Mano vizitai", href: "/", doctor: true },
   { name: "Mano vizitai", href: "/", patient: true },
   { name: "Receptai", href: "/prescription", patient: true },
-  { name: "Ligos istorija", href: "/visit/history", patient: true },
+  { name: "Ligos istorija", href: "/healthRecord", patient: true },
   { name: "Mano duomenys", href: "/user", patient: true },
   { name: "Mano pacientai", href: "/patients", doctor: true },
   { name: "Tyrimai", href: "/", worker: true },

@@ -5,8 +5,6 @@ import { useState } from 'react';
 export default function ShowLabTests(props) {
 
     const [labTests] = useState(props.labTest);
-    console.log(labTests);
-
 
     return (
         <div className="flex flex-col">

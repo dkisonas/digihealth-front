@@ -1,45 +1,72 @@
 import { PlusIcon } from '@heroicons/react/solid';
 import { useState } from 'react';
+import moment from 'moment';
 
 export default function AddMedicine(props) {
-  console.log(props);
-  const [selectedMedicines, setSelectedMedicines] = useState([]);
+  const [existingMedicine] = useState(props.medicineCurrent);
+  const [existingUsingTimes] = useState(props.usingTimesCurrent);
+  const [selectedMedicines, setSelectedMedicines] = useState(convertToView());
   const [allMedicineList] = useState(props.medicine);
   const [selectedMedicine, setSelectedMedicine] = useState(
-    allMedicineList[0].id
+    allMedicineList[0].name
   );
   const [usingTimes, setUsingTimes] = useState('');
-
-
 
   const handleUsingTimes = (e) => {
     setUsingTimes(e.target.value);
   };
 
   const handleMedicine = (e) => {
-    const med = allMedicineList.find((x) => x.id === e.target.value);
-    setSelectedMedicine(med.id);
+    const med = allMedicineList.find((x) => x.name === e.target.value);
+    setSelectedMedicine(med.name);
   };
 
   const addMedicine = () => {
     const medicine = {
-      med: allMedicineList.find((x) => x.id === selectedMedicine),
+      med: allMedicineList.find((x) => x.name === selectedMedicine),
       times: usingTimes,
     };
-    if (selectedMedicines.find((x) => x.med.id === selectedMedicine)) {
+
+    if (selectedMedicines.find((x) => x.med.name === selectedMedicine)) {
       return;
     }
+    
     const result = selectedMedicines.concat(medicine);
     setSelectedMedicines(result);
     props.onChange(result);
   };
 
-  const deleteMedicine = (id) => {
+  const deleteMedicine = (name) => {
     const newMeds = [...selectedMedicines];
-    const result = newMeds.filter((x) => x.med.id !== id);
+    const result = newMeds.filter((x) => x.med.name !== name);
     setSelectedMedicines(result);
     props.onChange(result);
   };
+
+
+  function convertToView() {
+    let result = [];
+    existingMedicine.forEach(medicine => {
+      result.push({
+        med: medicine,
+        times: formatUsingTime(existingUsingTimes.filter((x)=> x.medicamentId === medicine.id))
+      })
+    });
+    return result;
+  }
+
+  function formatUsingTime(input) {
+
+    if(input === null || input === undefined)
+    {
+      return "";
+    }
+    let result = "";
+    input.forEach(x=> {
+      result = result + x.time.substring(0,5)+ ';';
+    });
+    return result;
+  }
 
   return (
     <div className="text-center border mt-6 py-6">
@@ -58,7 +85,7 @@ export default function AddMedicine(props) {
             onChange={handleMedicine}
           >
             {allMedicineList.map(({ id, name }, i) => (
-              <option key={i} value={id}>
+              <option key={i} value={name}>
                 {name}
               </option>
             ))}
@@ -129,7 +156,7 @@ export default function AddMedicine(props) {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                           <div
-                            onClick={() => deleteMedicine(med.id)}
+                            onClick={() => deleteMedicine(med.name)}
                             className="text-indigo-600 hover:text-indigo-900 link"
                           >
                             Ištrinti

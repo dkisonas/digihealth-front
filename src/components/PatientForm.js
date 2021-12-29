@@ -4,7 +4,6 @@ import moment from 'moment';
 
 export default function PatientForm(props) {
   const [patient] = useState(props.patient);
-  console.log(props);
   return (
     <div>
       <div>
@@ -29,7 +28,7 @@ export default function PatientForm(props) {
             </dd>
           </div>
         </dl>
-        <PatientRecordsTable records={props.records} />
+        <PatientRecordsTable records={props.records} patient={props.patient} />
       </div>
     </div>
   );

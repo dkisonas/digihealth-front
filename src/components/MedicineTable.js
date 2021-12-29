@@ -2,7 +2,6 @@ import { useState } from 'react';
 
 export default function MedicineTable(props) {
   const [selectedMedicines] = useState(props.medicine);
-  console.log(selectedMedicines);
 
   return (
     <div className="flex flex-col">

@@ -17,9 +17,7 @@ function HealthRecord(props) {
 export default HealthRecord;
 
 export async function getServerSideProps({}) {
-  const id = process.env.NEXT_PUBLIC_USER_ID;
-  const records = await fetchJson(
-    `/HealthRecord/get/byPatient?patientId=${id}`
-  );
-  return { props: { records } };
+    const id = process.env.NEXT_PUBLIC_USER_ID;
+    const records = await fetchJson(`/HealthRecord/get/byPatient?patientId=${id}`);
+    return { props: { records } };
 }
