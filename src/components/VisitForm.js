@@ -1,21 +1,9 @@
 import { useState } from 'react';
-import AddLabTests from './AddLabTests';
-import AddMedicine from './AddMedicine';
-import ShowLabTests from './ShowLabTests';
 import moment from 'moment';
 import { useRouter } from 'next/router';
-import { update, post } from '../utils/HttpUtils';
+import { update, post, fetchJson } from '../utils/HttpUtils';
 import { formatVisitForRequest } from '../utils/VisitUtils';
 import { v4 as uuid } from 'uuid';
-import PrescriptionTable from './PrescriptionTable';
-
-const labNiuhalas = [
-  {Name: "testas1", description: "zdrw1", status: "Baigtas"},
-  {Name: "testas2", description: "zdrw2", status: "Laukiamas"},
-  {Name: "testas3", description: "zdrw3", status: "Laukiamas"},
-  {Name: "testas4", description: "zdrw4", status: "Baigtas"},
-  {Name: "testas5", description: "zdrw5", status: "Laukiamas"},
-];
 
 const doctorMode =
   process.env.NEXT_PUBLIC_VIEW_MODE === 'doctor' ? true : false;
@@ -27,22 +15,10 @@ export default function VisitForm(props) {
   const router = useRouter();
   const [visitStatus, setVisitStatus] = useState(props.visit.status);
   const [visit, setVisit] = useState(props.visit);
-  const [medicine] = useState(props.medicine);
-  const [allMedicine] = useState(props.medicine);
-  const [selectedMedicines, setSelectedMedicines] = useState([]);
-  const [selectedLabTests, setSelectedLabTests] = useState([]);
-  const [healthRecordDescription, setVisitDescription] = useState('');
-  const [isSms, setIsSms] = useState(false);
-
-
-  if(visitStatus === "Įvykęs") {
-    const [labTests, setLabTests] = useState(props.record[0].labTests);
-    const [record, setRecord] = useState(props.record[0]); 
-  }
+  const [healthRecordId, setHealthRecordId] = useState();
 
   async function cancelVisit() {
     let cancelledVisit = formatVisitForRequest({ ...visit });
-
     cancelledVisit.status = 'Atšauktas';
     await update(`/Visit/update`, cancelledVisit);
     alert('Vizitas atšauktas');
@@ -53,93 +29,43 @@ export default function VisitForm(props) {
     setVisitStatus(e.target.value);
   };
 
-  const handleMedicine = (medicine) => {
-    setSelectedMedicines(medicine);
-  };
-
-  const handleLabTests = (tests) => {
-    setSelectedLabTests(tests);
-  };
-
-  const handleTestDescription = (e) => {
-    setVisitDescription(e.target.value);
-  };
-
-  const handleSms = () => {
-    let ciulpkByby = !isSms;
-    setIsSms(ciulpkByby);
-  };
-
-  const formatMedicine = () => {
-    let usingTimes = [];
-    let medicines = [];
-    selectedMedicines.forEach((element) => {
-      let usingTime = element.times.split(',');
-      let medId = uuid();
-      usingTime.forEach((t) => {
-        usingTimes.push({
-          id: uuid(),
-          medicamentId: medId,
-          time: t,
-        });
-      });
-      medicines.push({
-        id: medId,
-        name: element.med.name,
-        description: element.med.description,
-      });
-    });
-    return { medicines, usingTimes };
-  };
-
-  const formatLabTests = () => {
-    return selectedLabTests.map((test) => ({
-      id: uuid(),
-      name: test.name,
-      description: test.description,
-      labWorkerId: '0d86f189-65ea-48d5-9224-36618b2b493e',
-      result: '',
-      status: 'Laukiamas',
-    }));
-  };
-
   async function saveVisit() {
     let newVisit = formatVisitForRequest({ ...visit });
     newVisit.status = visitStatus;
     setVisit(newVisit);
     await update(`/Visit/update`, visit);
     if (visitStatus === 'Įvykęs') {
-      const healthRecordId = uuid();
+
+      setHealthRecordId(uuid());
       const startDate = moment();
 
-      const formattedMedicine = formatMedicine();
-      const formattedLabTests = formatLabTests();
       const healthRecord = {
         id: healthRecordId,
         date: startDate.format('yyyy-MM-DD[T]hh:mm:ss.SSS[Z]'),
-        description: healthRecordDescription,
+        description: "",
         visitId: visit.id,
         patientId: visit.patientId,
         receipts: [
           {
             id: uuid(),
             patientId: visit.patientId,
-            remind: isSms,
+            remind: false,
             healthRecordId: healthRecordId,
-            usingTimes: formattedMedicine.usingTimes,
-            medicaments: formattedMedicine.medicines,
+            usingTimes: [],
+            medicaments: [],
             expiredDate: startDate
               .add(1, 'month')
               .format('yyyy-MM-DD[T]hh:mm:ss.SSS[Z]'),
           },
         ],
-        labTests: formattedLabTests,
+        labTests: [],
       };
-      console.log(healthRecord);
       const result = await post('/HealthRecord/create', healthRecord);
       if (result.success === true) {
         alert('Ligos istorijos įrašas sukurtas');
-        router.push('/');
+        router.push(`/healthRecord/${healthRecordId}`);
+      } else {
+        alert('Ligos istorija nebuvo sukurta: ' + result.exception);
       }
     }
   }
@@ -151,15 +77,9 @@ export default function VisitForm(props) {
   return (
     <div>
       <div>
-        {visitStatus === 'Įvykęs' ? (
-          <h3 className="text-lg leading-6 font-medium text-gray-900">
-            Įrašo Informacija
-          </h3>
-        ) : (
-          <h3 className="text-lg leading-6 font-medium text-gray-900">
-            Vizito Informacija{' '}
-          </h3>
-        )}
+        <h3 className="text-lg leading-6 font-medium text-gray-900">
+          Vizito Informacija{' '}
+        </h3>
       </div>
       <div className="mt-5 border-t border-gray-200">
         <dl className="sm:divide-y sm:divide-gray-200">
@@ -193,7 +113,7 @@ export default function VisitForm(props) {
             </dd>
           </div>
         </dl>
-        {!patientMode ? (
+        {doctorMode ? (
           <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
             <label
               htmlFor="country"
@@ -217,52 +137,8 @@ export default function VisitForm(props) {
             </div>
           </div>
         ) : null}
-        {visitStatus === 'Įvykęs' && doctorMode ? (
-          <div>
-            <div className="py-4 sm:py-5 sm:gnrid sm:grid-cols-3 sm:gap-4">
-              <dt className="text-sm font-medium text-gray-500">
-                {' '}
-                Įrašo aprašymas
-              </dt>
-              <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                <textarea
-                  rows={3}
-                  type="text"
-                  id="test-name"
-                  className="mx-auto mb-6 max-w-lg block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
-                  value={healthRecordDescription}
-                  onChange={handleTestDescription}
-                />
-              </dd>
-            </div>
-            <div className="relative flex items-start mt-5">
-              <div className="flex items-center h-5">
-                <input
-                  id="comments"
-                  aria-describedby="comments-description"
-                  name="comments"
-                  type="checkbox"
-                  onClick={handleSms}
-                  className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
-                />
-              </div>
-              <div className="ml-3 text-sm">
-                <label htmlFor="comments" className="font-medium text-gray-700">
-                  Siųsti SMS vaistų priminimus
-                </label>
-              </div>
-            </div>
-            <AddMedicine medicine={allMedicine} onChange={handleMedicine} />
-            <AddLabTests onChange={handleLabTests} />
-          </div>
-        ) : null}
       </div>
-      {patientMode && visitStatus === 'Įvykęs' ? (
-        <div>
-          <ShowLabTests labTest={labTests} />
-        </div>
-      ) : null}
-      {visitStatus !== 'Įvykęs' ? (
+      {visitStatus == 'Laukiamas' && patientMode ? (
         <div className="flex justify-center py-10">
           <button
             type="button"
@@ -273,18 +149,24 @@ export default function VisitForm(props) {
           </button>
         </div>
       ) : null}
-      {patientMode && visitStatus === 'Įvykęs' ? (
-        <div className="flex justify-center py-10">
+      <div className="flex justify-center py-10">
+        {doctorMode ? (
           <button
-            onClick={saveVisit}
             type="button"
-            className="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            onClick={goBack}
+            className="inline-flex items-center mr-2.5 px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            onClick={saveVisit}
           >
-            Atgal
+            Išsaugoti
           </button>
-        </div>
-      ) : null}
+        ) : null}
+        <button
+          type="button"
+          className="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          onClick={goBack}
+        >
+          Atgal
+        </button>
+      </div>
     </div>
   );
 }

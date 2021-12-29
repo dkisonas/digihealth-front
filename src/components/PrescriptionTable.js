@@ -22,10 +22,13 @@ export default function PrescriptionTable(props) {
                   >
                     Recepto galiojimo data
                   </th>
+                  <th scope="col" className="relative px-6 py-3">
+                    <span className="sr-only">Edit</span>
+                  </th>
                 </tr>
               </thead>
                <tbody>
-                {/* {prescription.map((recipe, recipeId) => (
+                {prescription.map((recipe, recipeId) => (
                   <tr
                     key={recipe.id}
                     className={recipeId % 2 === 0 ? 'bg-white' : 'bg-gray-50'}
@@ -41,7 +44,7 @@ export default function PrescriptionTable(props) {
                       </Link>
                     </td>
                   </tr>
-                ))} */}
+                ))}
               </tbody> 
             </table>
           </div>

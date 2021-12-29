@@ -23,17 +23,11 @@ export default Visit;
 
 export async function getServerSideProps({ query }) {
   const visitId = query.vid;
-  const selectableMedicine = await fetchJson('/Recipe/get/selectableMedicaments');
+  const medicine = await fetchJson('/Recipe/get/selectableMedicaments');
   const result = await fetchJson(`/Visit/get?visitId=${visitId}`);
   const visit = await formatVisitForDisplay(result).then((x) => {
     return x;
   });
-
-  if (visit.status === "Įvykęs") {
-    let record = await fetchJson(`/HealthRecord/get/byVisit?visitId=${visitId}`);
-    const labTest = await fetchJson(`/LabWorker/get/labTest/byHealthRecordId?healthRecordId=${record[0].id}`);
-    record[0].labTests = labTest;
-    return { props: { visit, selectableMedicine, record } }
-  }
-  return { props: { visit, selectableMedicine } };
+  
+  return { props: { visit, medicine } };
 }

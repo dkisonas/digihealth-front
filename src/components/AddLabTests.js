@@ -4,9 +4,10 @@ import { useState } from 'react';
 import { v4 as uuid } from 'uuid';
 
 export default function AddLabTests(props) {
-  const [selectedTests, setSelectedTests] = useState([]);
   const [testName, setTestName] = useState('');
   const [testDescription, setTestDescription] = useState('');
+  const [existingLabTest] = useState(props.labTestCurrent)
+  const [selectedTests, setSelectedTests] = useState(convertToView());
 
   const handleTestName = (e) => {
     setTestName(e.target.value);
@@ -33,6 +34,25 @@ export default function AddLabTests(props) {
     setSelectedTests(result);
     props.onChange(result);
   };
+
+  function convertToView() {
+    
+    let result = [];
+
+    if(existingLabTest === null || existingLabTest === undefined)
+    {
+      return result;
+    }
+
+    existingLabTest.forEach(x=> {
+      result.push({
+        id: x.id,
+        name: x.name,
+        description: x.description
+      });
+    });
+    return result;
+  }
 
   return (
     <div className="text-center border mt-6 py-6">
