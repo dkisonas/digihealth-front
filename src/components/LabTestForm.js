@@ -5,6 +5,7 @@ import { update } from '../utils/HttpUtils';
 const userId = process.env.NEXT_PUBLIC_USER_ID;
 const workerMode = process.env.NEXT_PUBLIC_VIEW_MODE === 'worker' ? true : false;
 const patientMode = process.env.NEXT_PUBLIC_VIEW_MODE === 'patient' ? true : false;
+const doctorMode = process.env.NEXT_PUBLIC_VIEW_MODE === 'doctor' ? true:  false;
 
 export default function LabTestForm(props) {
     const router = useRouter();
@@ -21,7 +22,8 @@ export default function LabTestForm(props) {
     };
 
     async function Update() {
-        let newTest = {
+
+        const newTest = {
             id: labTest.id,
             description: labTest.description,
             result: testResult,
@@ -120,7 +122,7 @@ export default function LabTestForm(props) {
                     </button>
                 </div>
             </div>) : null}
-            {patientMode ? (
+            {patientMode || doctorMode ? (
                 <div className="pt-5">
                     <div className="flex justify-end">
                         <button

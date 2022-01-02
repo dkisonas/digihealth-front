@@ -1,12 +1,13 @@
 import moment from 'moment';
 import Link from 'next/link';
+import { useState } from 'react';
 
 const dateFormat = 'yyyy-MM-DD';
 
 
 export default function PrescriptionTable(props) {
 
-  const prescription  = props.prescription;
+  const [prescription]  = useState(props.prescription);
 
   return (
     <div className="flex flex-col">
