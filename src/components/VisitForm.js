@@ -18,7 +18,6 @@ export default function VisitForm(props) {
   const router = useRouter();
   const [visitStatus, setVisitStatus] = useState(props.visit.status);
   const [visit, setVisit] = useState(props.visit);
-  const [healthRecordId, setHealthRecordId] = useState();
 
   async function cancelVisit() {
     let cancelledVisit = formatVisitForRequest({ ...visit });
@@ -40,7 +39,8 @@ export default function VisitForm(props) {
     setVisit(newVisit);
 
     if (visitStatus === 'Įvykęs') {
-      setHealthRecordId(uuid());
+      const healthRecordId = uuid();
+      console.log(healthRecordId);
 
       const startDate = moment();
 
@@ -50,19 +50,7 @@ export default function VisitForm(props) {
         description: '',
         visitId: visit.id,
         patientId: visit.patientId,
-        receipts: [
-          {
-            id: uuid(),
-            patientId: visit.patientId,
-            remind: false,
-            healthRecordId: healthRecordId,
-            usingTimes: [],
-            medicaments: [],
-            expiredDate: startDate
-              .add(1, 'month')
-              .format('yyyy-MM-DD[T]hh:mm:ss.SSS[Z]'),
-          },
-        ],
+        receipts: [],
         labTests: [],
       };
       const result = await post('/HealthRecord/create', healthRecord);

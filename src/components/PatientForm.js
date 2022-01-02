@@ -1,4 +1,4 @@
-import PatientRecordsTable from './PatientRecordsTable';
+import HealthRecordTable from '../components/HealthRecordTable';
 import { useState } from 'react';
 import moment from 'moment';
 import { router, useRouter } from 'next/router';
@@ -35,7 +35,7 @@ export default function PatientForm(props) {
             </dd>
           </div>
         </dl>
-        <PatientRecordsTable records={props.records} patient={props.patient} />
+        <HealthRecordTable records={props.records} patient={props.patient} />
         <div className="flex justify-center py-10">
           <button
             type="button"
