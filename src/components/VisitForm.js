@@ -2,7 +2,10 @@ import { useState } from 'react';
 import moment from 'moment';
 import { useRouter } from 'next/router';
 import { update, post, fetchJson } from '../utils/HttpUtils';
-import { formatVisitForRequest } from '../utils/VisitUtils';
+import {
+  formatVisitForRequest,
+  formatVisitForDisplay,
+} from '../utils/VisitUtils';
 import { v4 as uuid } from 'uuid';
 
 const doctorMode =
@@ -32,19 +35,19 @@ export default function VisitForm(props) {
   async function saveVisit() {
     let newVisit = formatVisitForRequest({ ...visit });
     newVisit.status = visitStatus;
-    setVisit(newVisit);
     await update(`/Visit/update`, newVisit);
+    newVisit = await formatVisitForDisplay(newVisit);
+    setVisit(newVisit);
 
     if (visitStatus === 'Įvykęs') {
-
       setHealthRecordId(uuid());
-      
+
       const startDate = moment();
 
       const healthRecord = {
         id: healthRecordId,
         date: startDate.format('yyyy-MM-DD[T]hh:mm:ss.SSS[Z]'),
-        description: "",
+        description: '',
         visitId: visit.id,
         patientId: visit.patientId,
         receipts: [
@@ -88,7 +91,7 @@ export default function VisitForm(props) {
           <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4">
             <dt className="text-sm font-medium text-gray-500">Data</dt>
             <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-              {moment(visit.date).format('yyyy-MM-DD hh:mm')}
+              {visit.date}
             </dd>
           </div>
           <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4">
