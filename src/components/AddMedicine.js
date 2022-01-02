@@ -30,7 +30,7 @@ export default function AddMedicine(props) {
     if (selectedMedicines.find((x) => x.med.name === selectedMedicine)) {
       return;
     }
-    
+
     const result = selectedMedicines.concat(medicine);
     setSelectedMedicines(result);
     props.onChange(result);
@@ -43,27 +43,31 @@ export default function AddMedicine(props) {
     props.onChange(result);
   };
 
-
   function convertToView() {
     let result = [];
-    existingMedicine.forEach(medicine => {
+
+    if (existingMedicine === null || existingMedicine === undefined) {
+      return result;
+    }
+
+    existingMedicine.forEach((medicine) => {
       result.push({
         med: medicine,
-        times: formatUsingTime(existingUsingTimes.filter((x)=> x.medicamentId === medicine.id))
-      })
+        times: formatUsingTime(
+          existingUsingTimes.filter((x) => x.medicamentId === medicine.id)
+        ),
+      });
     });
     return result;
   }
 
   function formatUsingTime(input) {
-
-    if(input === null || input === undefined)
-    {
-      return "";
+    if (input === null || input === undefined) {
+      return '';
     }
-    let result = "";
-    input.forEach(x=> {
-      result = result + x.time.substring(0,5)+ ';';
+    let result = '';
+    input.forEach((x) => {
+      result = result + x.time.substring(0, 5) + ';';
     });
     return result;
   }

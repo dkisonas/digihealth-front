@@ -17,7 +17,7 @@ async function formatVisitForDisplay(visit) {
     name: visit.name,
     description: visit.description,
     status: visit.status,
-    date: moment(visit.startDate).format('yyyy-MM-DD hh:mm'),
+    date: moment(visit.startDate).parseZone().format('yyyy-MM-DD hh:mm'),
     endDate: visit.endDate,
     doctorId: visit.doctorId,
     doctorName: getUsersFullName(doctors, visit.doctorId),

@@ -4,10 +4,10 @@ import { useState } from 'react';
 
 const dateFormat = 'yyyy-MM-DD';
 
-
 export default function PrescriptionTable(props) {
+  const [prescription] = useState(props.prescription);
 
-  const [prescription]  = useState(props.prescription);
+  console.log(prescription);
 
 
   return (
@@ -29,7 +29,7 @@ export default function PrescriptionTable(props) {
                   </th>
                 </tr>
               </thead>
-               <tbody>
+              <tbody>
                 {prescription.map((recipe, recipeId) => (
                   <tr
                     key={recipe.id}
@@ -47,7 +47,7 @@ export default function PrescriptionTable(props) {
                     </td>
                   </tr>
                 ))}
-              </tbody> 
+              </tbody>
             </table>
           </div>
         </div>
