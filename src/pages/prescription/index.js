@@ -22,7 +22,6 @@ export async function getServerSideProps() {
 
   const prescription = await fetchJson(`/Recipe/get/byPatientId?patientid=${id}`);
 
-  console.log(prescription);
 
   return { props: { prescription } };
 }

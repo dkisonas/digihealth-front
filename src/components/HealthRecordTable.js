@@ -6,7 +6,7 @@ const dateFormat = 'yyyy-MM-DD';
 
 export default function HealthRecordTable(props) {
   const [records] = useState(props.records);
-  console.log(props);
+
 
   return (
     <div className="flex flex-col">

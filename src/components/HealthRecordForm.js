@@ -16,6 +16,7 @@ const patientMode =
   process.env.NEXT_PUBLIC_VIEW_MODE === 'patient' ? true : false;
 
 export default function HealthRecordForm(props) {
+
   const router = useRouter();
 
   const [selectableMedicine] = useState(props.selectableMedicine);
