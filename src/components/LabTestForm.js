@@ -36,7 +36,7 @@ export default function LabTestForm(props) {
     }
 
     const goBack = () => {
-        router.push('/');
+        router.back();
     };
 
     return (

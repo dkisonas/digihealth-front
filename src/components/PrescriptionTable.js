@@ -9,6 +9,7 @@ export default function PrescriptionTable(props) {
 
   const [prescription]  = useState(props.prescription);
 
+
   return (
     <div className="flex flex-col">
       <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">

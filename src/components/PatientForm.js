@@ -8,7 +8,7 @@ export default function PatientForm(props) {
   const router = useRouter();
 
   function goBack() {
-    router.push('/');
+    router.back();
   }
 
   return (

@@ -38,7 +38,7 @@ export default function VisitForm(props) {
     if (visitStatus === 'Įvykęs') {
 
       setHealthRecordId(uuid());
-      
+
       const startDate = moment();
 
       const healthRecord = {
@@ -73,7 +73,7 @@ export default function VisitForm(props) {
   }
 
   const goBack = () => {
-    router.push('/');
+    router.back();
   };
 
   return (

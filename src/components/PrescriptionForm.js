@@ -31,7 +31,7 @@ export default function PrescriptionForm(props) {
     }
 
     function goBack() {
-        router.push('/prescription');
+        router.back();
     }
 
     return (

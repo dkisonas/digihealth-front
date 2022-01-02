@@ -18,9 +18,6 @@ const patientMode =
 export default function HealthRecordForm(props) {
     const router = useRouter();
 
-    console.log(props);
-
-    console.log(props);
 
     const [selectableMedicine] = useState(props.selectableMedicine);
     const [visit, setVisit] = useState(props.visit);
@@ -197,7 +194,7 @@ export default function HealthRecordForm(props) {
     };
 
     const goBack = () => {
-        router.push('/healthRecord');
+        router.back();
     };
 
     return (
