@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import AddMedicine from './AddMedicine';
 import moment from 'moment';
-import { useRouter } from 'next/router';
+import { Router, useRouter } from 'next/router';
 import { update } from '../utils/HttpUtils';
 
 const doctorMode = process.env.NEXT_PUBLIC_VIEW_MODE === 'doctor' ? true : false;
@@ -9,6 +9,7 @@ const doctorMode = process.env.NEXT_PUBLIC_VIEW_MODE === 'doctor' ? true : false
 export default function PrescriptionForm(props) {
     const [medicine] = useState(props.prescription.medicaments);
     const [usingTimes] = useState(props.prescription.usingTimes);
+    const router = useRouter();
 
     function setTimes(medicamentId) {
 
@@ -22,11 +23,15 @@ export default function PrescriptionForm(props) {
         });
 
         validUsingTimes.forEach(validUsingTime => {
-            
+
             usingTime = usingTime.concat(validUsingTime.time, "; ");
         });
 
         return usingTime;
+    }
+
+    function goBack() {
+        router.push('/prescription');
     }
 
     return (
@@ -84,6 +89,15 @@ export default function PrescriptionForm(props) {
                         </tbody>
                     </table>
                 </dl>
+            </div>
+            <div className="flex justify-center py-10">
+                <button
+                    type="button"
+                    onClick={goBack}
+                    className="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                >
+                    Atgal
+                </button>
             </div>
         </div>
     );

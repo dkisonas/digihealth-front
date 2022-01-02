@@ -33,10 +33,12 @@ export default function VisitForm(props) {
     let newVisit = formatVisitForRequest({ ...visit });
     newVisit.status = visitStatus;
     setVisit(newVisit);
-    await update(`/Visit/update`, visit);
+    await update(`/Visit/update`, newVisit);
+
     if (visitStatus === 'Įvykęs') {
 
       setHealthRecordId(uuid());
+      
       const startDate = moment();
 
       const healthRecord = {

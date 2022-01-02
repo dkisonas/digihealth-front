@@ -1,9 +1,16 @@
 import PatientRecordsTable from './PatientRecordsTable';
 import { useState } from 'react';
 import moment from 'moment';
+import { router, useRouter } from 'next/router';
 
 export default function PatientForm(props) {
   const [patient] = useState(props.patient);
+  const router = useRouter();
+
+  function goBack() {
+    router.push('/');
+  }
+
   return (
     <div>
       <div>
@@ -29,6 +36,15 @@ export default function PatientForm(props) {
           </div>
         </dl>
         <PatientRecordsTable records={props.records} patient={props.patient} />
+        <div className="flex justify-center py-10">
+          <button
+            type="button"
+            onClick={goBack}
+            className="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          >
+            Atgal
+          </button>
+        </div>
       </div>
     </div>
   );

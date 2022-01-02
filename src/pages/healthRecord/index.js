@@ -1,6 +1,5 @@
 import Header from '../../components/Header';
-import HealthRecordTable from '../../components/HealthRecordTable';
-import { formatVisitForDisplay } from '../../utils/VisitUtils';
+import HealthRecordTable from '../../components/PatientRecordsTable';
 import { fetchJson } from '../../utils/HttpUtils';
 
 function HealthRecord(props) {
