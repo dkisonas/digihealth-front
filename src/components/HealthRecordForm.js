@@ -18,17 +18,18 @@ const patientMode =
 export default function HealthRecordForm(props) {
     const router = useRouter();
 
+    console.log(props);
 
     console.log(props);
 
     const [selectableMedicine] = useState(props.selectableMedicine);
     const [visit, setVisit] = useState(props.visit);
-    const [patient, setPatient] = useState(props.patient);
-    const [record, setRecord] = useState(props.record);
-    const [prescriptions, setPrescriptions] = useState(props.record.prescriptions);
-    const [labTests, setLabTests] = useState(props.record.labTests);
-    const [medicine, setMedicine] = useState(props.record.prescriptions[0].medicaments)
-    const [usingTimes, setUsingTimes] = useState(props.record.prescriptions[0].usingTimes)
+    const [patient] = useState(props.patient);
+    const [record] = useState(props.record);
+    const [prescriptions, setPrescriptions] = useState(props.record.prescriptions[0]);
+    const [labTests] = useState(props.record.labTests);
+    const [medicine] = useState(props.record.prescriptions[0].medicaments)
+    const [usingTimes] = useState(props.record.prescriptions[0].usingTimes)
     const [selectedMedicines, setSelectedMedicines] = useState(convertToMedicineView());
     const [selectedLabTests, setSelectedLabTests] = useState(convertToLabTestView());
     const [healthRecordDescription, setVisitDescription] = useState('');
@@ -108,8 +109,6 @@ export default function HealthRecordForm(props) {
                 ],
                 labTests: formattedLabTests,
             };
-
-            //console.log(newHealhRecord);
             const result = await update('/HealthRecord/update', newHealhRecord);
             if (result.success === true) {
                 alert('Ligos istorijos įrašas atnaujintas');
