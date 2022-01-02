@@ -20,5 +20,7 @@ export async function getServerSideProps({ query }) {
 
   const recipeId = query.pid;
   const prescription = await fetchJson(`/Recipe/get/byId?recipeId=${recipeId}`);
+
+
   return { props: { prescription } };
 }

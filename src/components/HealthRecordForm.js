@@ -16,9 +16,11 @@ const patientMode =
     process.env.NEXT_PUBLIC_VIEW_MODE === 'patient' ? true : false;
 
 export default function HealthRecordForm(props) {
-
-
     const router = useRouter();
+
+
+    console.log(props);
+
     const [selectableMedicine] = useState(props.selectableMedicine);
     const [visit, setVisit] = useState(props.visit);
     const [patient, setPatient] = useState(props.patient);
@@ -141,22 +143,6 @@ export default function HealthRecordForm(props) {
         setIsSms(ciulpkByby);
     };
 
-    // function convertMedicineToView() {
-    //     let result = [];
-
-    //     if(medicine === null || medicine === undefined)
-    //     {
-    //         return result;
-    //     }
-
-    //     medicine.forEach(x=> {
-    //         result.push({
-
-    //         });
-    //     });
-    //     return result;
-    // }
-
     const formatMedicine = (recipeId) => {
         let cuurentUsingTimes = [];
         let currentMedicines = [];
@@ -207,12 +193,12 @@ export default function HealthRecordForm(props) {
             labWorkerId: '0d86f189-65ea-48d5-9224-36618b2b493e',
             result: '',
             status: (test.status === null || test.status === undefined) ? 'Laukiamas' : test.status,
-            healthRecordId: id 
+            healthRecordId: id
         }));
     };
 
     const goBack = () => {
-        router.push('/');
+        router.push('/healthRecord');
     };
 
     return (
