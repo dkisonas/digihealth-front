@@ -7,9 +7,6 @@ const dateFormat = 'yyyy-MM-DD';
 export default function PrescriptionTable(props) {
   const [prescription] = useState(props.prescription);
 
-  console.log(prescription);
-
-
   return (
     <div className="flex flex-col">
       <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">

@@ -35,17 +35,14 @@ export default function HealthRecordForm(props) {
   const [selectedLabTests, setSelectedLabTests] = useState(
     convertToLabTestView()
   );
-  const [healthRecordDescription, setVisitDescription] = useState('');
+  const [healthRecordDescription, setVisitDescription] = useState(props.record.description);
   const [isSms, setIsSms] = useState(false);
   const [updateView, setUpdateView] = useState(false);
 
   function convertToMedicineView() {
     let result = [];
 
-    console.log(medicine);
-
     if (medicine === null || medicine === undefined) {
-      console.log('cbb');
       return result;
     }
 
@@ -90,9 +87,12 @@ export default function HealthRecordForm(props) {
   }
 
   async function updateHealthRecord() {
+
     if (record) {
       const startDate = moment();
       const formattedLabTests = formatLabTests(record.id);
+      const recipeId = uuid();
+      const formattedMediceAndUsingTimes = formatMedicine(prescriptions[0] === undefined ? recipeId : prescriptions[0].id);
       const newHealhRecord = {
         id: record.id,
         date: record.date,
@@ -101,26 +101,27 @@ export default function HealthRecordForm(props) {
         patientId: record.patientId,
         receipts: [
           {
-            id: prescriptions[0] === undefined ? uuid() : prescriptions[0].id,
+            id: prescriptions[0] === undefined ? recipeId : prescriptions[0].id,
             patientId: visit.patientId,
             remind: isSms,
             healthRecordId: record.id,
-            usingTimes: formatMedicine(prescriptions[0]?.id).currentUsingTimes,
-            medicaments: formatMedicine(prescriptions[0]?.id).currentMedicines,
+            usingTimes: formattedMediceAndUsingTimes.currentUsingTimes,
+            medicaments: formattedMediceAndUsingTimes.currentMedicines,
             expiredDate:
-              record.receipts[0] === undefined
+              record.prescriptions[0] === undefined
                 ? startDate
-                    .add(1, 'month')
-                    .format('yyyy-MM-DD[T]hh:mm:ss.SSS[Z]')
-                : record.receipts[0].expiredDate,
+                  .add(1, 'month')
+                  .format('yyyy-MM-DD[T]hh:mm:ss.SSS[Z]')
+                : record.prescriptions[0].expiredDate,
           },
         ],
         labTests: formattedLabTests,
       };
+      console.log(newHealhRecord);
       const result = await update('/HealthRecord/update', newHealhRecord);
       if (result.success === true) {
         alert('Ligos istorijos įrašas atnaujintas');
-        router.push('/');
+        router.push('/patients/' + record.patientId);
       }
     }
   }
@@ -146,43 +147,51 @@ export default function HealthRecordForm(props) {
   };
 
   const handleSms = () => {
-    let ciulpkByby = !isSms;
-    setIsSms(ciulpkByby);
+    setIsSms(!isSms);
   };
 
   const formatMedicine = (recipeId) => {
+
     let currentUsingTimes = [];
     let currentMedicines = [];
 
-    if (recipeId === null || recipeId === undefined) {
-      return { currentMedicines, currentUsingTimes };
+    if (selectableMedicine === null || selectableMedicine === undefined || selectableMedicine === []) {
+      return;
     }
 
     selectedMedicines.forEach((element) => {
       let usingTime = element.times.split(';');
+
+      let existingMed = medicine?.find((x) => x.name === element.name && x.description === element.description);
+
       let medId =
-        element.med.id === null || element.med.id === undefined
+        existingMed === null || existingMed === undefined
           ? uuid()
-          : element.med.id;
+          : existingMed.id;
 
       usingTime.forEach((t) => {
-        if (t !== '') {
-          const existingUsingTime = usingTimes.find(
-            (x) => x.medicamentId === medId && x.time === t
-          );
 
-          if (existingUsingTime === null || existingUsingTime === undefined) {
-            currentUsingTimes.push({
-              id: uuid(),
-              medicamentId: medId,
-              time: t,
-              recipeId: recipeId,
-            });
-          } else {
+
+        if (t !== '') {
+          let existingUsingTime;
+          if (usingTimes !== undefined && usingTimes !== null && usingTimes !== []) {
+            existingUsingTime = usingTimes.find(
+              (x) => x.medicamentId === medId && x.time === t
+            );
+          }
+
+          if (existingUsingTime !== undefined) {
             currentUsingTimes.push({
               id: existingUsingTime.id,
               medicamentId: medId,
               time: existingUsingTime.time,
+              recipeId: recipeId,
+            });
+          } else {
+            currentUsingTimes.push({
+              id: uuid(),
+              medicamentId: medId,
+              time: t,
               recipeId: recipeId,
             });
           }
@@ -215,7 +224,7 @@ export default function HealthRecordForm(props) {
   };
 
   const goBack = () => {
-    router.push('/healthRecord');
+    router.back();
   };
 
   return (
@@ -259,6 +268,17 @@ export default function HealthRecordForm(props) {
             </dd>
           </div>
         </dl>
+        {!updateView ? (
+          <div className="py-4 sm:py-5 sm:gnrid sm:grid-cols-3 sm:gap-4">
+            <dt className="text-sm font-medium text-gray-500">
+              {' '}
+              Įrašo aprašymas
+            </dt>
+            <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+              {healthRecordDescription}
+            </dd>
+          </div>
+        ) : null}
         {updateView ? (
           <div>
             <div className="py-4 sm:py-5 sm:gnrid sm:grid-cols-3 sm:gap-4">

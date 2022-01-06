@@ -2,6 +2,8 @@ import { PlusIcon } from '@heroicons/react/solid';
 import { useState } from 'react';
 import moment from 'moment';
 
+const regex = "^[0-9;:\b]+$";
+
 export default function AddMedicine(props) {
   const [existingMedicine] = useState(props.medicineCurrent);
   const [existingUsingTimes] = useState(props.usingTimesCurrent);
@@ -13,8 +15,26 @@ export default function AddMedicine(props) {
   const [usingTimes, setUsingTimes] = useState('');
 
   const handleUsingTimes = (e) => {
-    setUsingTimes(e.target.value);
+
+    const pattern = new RegExp(regex);
+    const value = e.target.value;
+    
+    if(e.target.value === '') {
+      setUsingTimes(e.target.value);
+      return;
+    }
+
+    if(pattern.test(value) && e.target.value !== '')
+    {
+      setUsingTimes(e.target.value);
+    }
+
   };
+  
+  function validateHhMm(inputField) {
+    return /^([0-1][0-9]|2[0-3]):([0-5][0-9])$/.test(inputField);
+  }
+
 
   const handleMedicine = (e) => {
     const med = allMedicineList.find((x) => x.name === e.target.value);
@@ -22,6 +42,26 @@ export default function AddMedicine(props) {
   };
 
   const addMedicine = () => {
+
+    let usingTime = usingTimes.split(';');
+
+    let inValid = 0;
+
+    usingTime.forEach(time => {
+      if(time !== '') {
+        if(!validateHhMm(time)) {
+          inValid++;
+        }
+      }
+    });
+
+    if(inValid > 0) {
+      alert('Blogai įvestas laikas.');
+      setUsingTimes('');
+      return;
+    }
+
+
     const medicine = {
       med: allMedicineList.find((x) => x.name === selectedMedicine),
       times: usingTimes,
