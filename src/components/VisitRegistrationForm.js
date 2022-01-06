@@ -14,6 +14,8 @@ export default function VisitRegistrationForm() {
 
   const dateFormat = 'yyyy-MM-DD[T]hh:mm:ss.SSS[Z]';
 
+  const regexDate = '/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/';
+
   const [doctors, setDoctors] = useState([{}]);
   const [doctor, setDoctor] = useState(null);
   const [doctorType, setDoctorType] = useState();
@@ -62,6 +64,7 @@ export default function VisitRegistrationForm() {
   };
 
   async function handleStartDate(date) {
+    
     setStartDate(date);
     const formattedDate = moment(date).format(dateFormat);
     const params = new URLSearchParams([

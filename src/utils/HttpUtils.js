@@ -25,7 +25,7 @@ async function update(url, body) {
   });
 
   if (isOk) {
-    const { result } = await res.data;
+    const result  = await res.data;
     return result;
   }
   return null;

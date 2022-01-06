@@ -98,7 +98,7 @@ export default function AddLabTests(props) {
           onClick={addLabTest}
         >
           <PlusIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
-          Pridėti vaistų
+          Pridėti testą
         </button>
 
         <div className="flex flex-col mt-6">
