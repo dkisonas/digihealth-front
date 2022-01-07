@@ -5,7 +5,7 @@ import { update } from '../utils/HttpUtils';
 const userId = process.env.NEXT_PUBLIC_USER_ID;
 const workerMode = process.env.NEXT_PUBLIC_VIEW_MODE === 'worker' ? true : false;
 const patientMode = process.env.NEXT_PUBLIC_VIEW_MODE === 'patient' ? true : false;
-const doctorMode = process.env.NEXT_PUBLIC_VIEW_MODE === 'doctor' ? true:  false;
+const doctorMode = process.env.NEXT_PUBLIC_VIEW_MODE === 'doctor' ? true : false;
 
 export default function LabTestForm(props) {
     const router = useRouter();
@@ -28,10 +28,14 @@ export default function LabTestForm(props) {
             description: labTest.description,
             result: testResult,
             status: testStatus,
-            labWorkerId: userId
+            labWorkerId: userId,
+            healthRecordId: labTest.healthRecordId
         };
 
-        await update(`/LabWorker/update/labTest`, newTest);
+        const result = await update(`/LabWorker/update/labTest`, newTest);
+        if (result.success) {
+            alert("Įrašas atnaujintas sėkmingai.");
+        }
         router.push('/');
     }
 
@@ -72,24 +76,6 @@ export default function LabTestForm(props) {
                 </div>
             </div>
             <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-                {workerMode ? (
-                    <div className="mt-1 sm:mt-0 sm:col-span-2">
-                        <label
-                            htmlFor="country"
-                            className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
-                        >
-                            Statusas
-                        </label>
-                        <select
-                            defaultValue={labTest.status}
-                            onChange={handleTestStatus}
-                            id="country"
-                            className="max-w-lg block focus:ring-indigo-500 focus:border-indigo-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
-                        >
-                            <option>Laukiamas</option>
-                            <option>Įvykdytas</option>
-                        </select>
-                    </div>) : null}
                 {workerMode ? (<div className="mt-1 sm:mt-0 sm:col-span-2">
                     <select
                         defaultValue={labTest.status}
